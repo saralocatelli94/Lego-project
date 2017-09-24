@@ -37,6 +37,7 @@ int main() {
     map.open("map_specs.txt");
     if (!map.is_open()) {
         cerr << "ERROR: Could not open map description file." << endl;
+        return 0;
     }
     else {
         int line_count = 0;
@@ -156,6 +157,8 @@ int main() {
     }
 
     road_map.printGraph();
+    int** adjMatrix=road_map.printAdjMatrix();
+    std::vector<char> pathDirections=road_map.dijkstra(adjMatrix, 0,18);
     
     return 0;
 }
