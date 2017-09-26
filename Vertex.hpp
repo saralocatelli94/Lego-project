@@ -31,15 +31,18 @@ public:
     bool getDimond();
     bool getGoal();
     bool getSokoban();
+    bool getgoalReached();
     
+    void setGoal(bool g);
     void setDimond(bool d);
     void setSokoban(bool s);
+    void setgoalReached(bool gr);
     
 protected:
     int index;
     std::string name;
     
-    bool dimond, goal, sokoban;
+    bool dimond, goal, sokoban, goalReached;
 };
 
 ////////////////////////////////////////////////////////////////

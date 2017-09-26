@@ -30,7 +30,11 @@ public:
     void addEdge(std::string source, std::string target, unsigned int weight, char direction);
     void removeEdge(unsigned int source, unsigned int target);
     int** printAdjMatrix();
-    std::vector<char> dijkstra(int**matrix,int src,int dest);
+    std::pair<int,std::vector<char>> dijkstra(int**matrix,int src,bool flag);
+    int findMinDist(int dist[]);
+    void updateMap(int dest,int src);
+    std::vector<int> getDiamondsID();
+    int getSource();
     bool vertexExist(std::string name);
     
     // Acces a vertex:
@@ -40,10 +44,12 @@ public:
     
     // print graph
     void printGraph();
-    
+    std::map<int,Vertex> vertexMap; // map for the index of a vertex and the vertex
+
 protected:
     std::vector<Vertex> adjList;
      unsigned int numOfVertex;
+
 
     
 private:
@@ -51,7 +57,7 @@ private:
     void printSolution(int dist[]);
 
     int minDistance(int dist[], bool sptSet[]);
-    std::map<int,Vertex> vertexMap; // map for the index of a vertex and the vertex
+
 
 };
 

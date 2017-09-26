@@ -283,13 +283,37 @@ void Graph::printSolution(int dist[])
 
 }
 
-std::vector<char> Graph::dijkstra(int**matrix,int src,int dest)
+// return the index of the node with the min distance
+int Graph::findMinDist(int dist[]){
+	int min=INT_MAX;
+	for(int i=0;i<numOfVertex;i++){
+		if(dist[i]<dist[min] && dist[i]>0){
+
+			min=i;
+		}
+	}
+	return min;
+}
+std::vector<int > Graph::getDiamondsID(){
+	std::vector<int> result;
+	for(int i=0;i<numOfVertex;i++){
+		if(vertexMap[i].getDimond())
+			result.push_back(i);
+	}
+	return result;
+}
+
+
+//return the ID of the vertex with the min distance and the path from src to that vertex
+//flag==0 destination=goal
+//flag==1 destination=diamond
+std::pair<int,std::vector<char>> Graph::dijkstra(int**matrix,int src,bool flag)
 {
 	std::vector<char> pathDirection;  // vector of the direction of the path
-	if(src<0 || dest<0 || src>=numOfVertex ||dest>=numOfVertex)
+	if(src<0 || src>=numOfVertex )
 	{
 		std::cout<<"Insert a correct value. ";
-		return pathDirection;
+		return std::make_pair(-1,pathDirection);
 	}
 
 		 int dist[numOfVertex];     //  dist[i] will hold the shortest distance from src to i
@@ -310,16 +334,43 @@ std::vector<char> Graph::dijkstra(int**matrix,int src,int dest)
 		   // Mark the picked vertex as processed
 		   sptSet[u] = true;
 
+
 		   // Update dist value of the adjacent vertices
-		   for (int v = 0; v < numOfVertex; v++)
-			 if (!sptSet[v] && matrix[u][v] && dist[u] != INT_MAX && dist[u]+matrix[u][v] < dist[v]){
-				dist[v] = dist[u] + matrix[u][v];
-				nodes[v].setPrev(&nodes[u]); // u is the temporary prev node of v
+		   for (int v = 0; v < numOfVertex; v++){
+
+			 if (!sptSet[v] && matrix[u][v] && dist[u] != INT_MAX && dist[u]+matrix[u][v] < dist[v]
+				){
+				 // std::cout<<u<<", "<<!vertexMap[u].getDimond() <<std::endl;
+				 if(!vertexMap[v].getgoalReached()){
+					 dist[v] = dist[u] + matrix[u][v];
+					nodes[v].setPrev(&nodes[u]); // u is the temporary prev node of v
+				 }
+			 }
+		   }
+		 }
+
+
+		 if(flag==0)
+		 //keep only the vertexs which have a goal
+		 for(int i=0;i<numOfVertex;i++){
+			 if(!vertexMap[i].getGoal()){
+				 dist[i]=-1;
 			 }
 		 }
 
-		 printSolution(dist); // print the costs from the source to all the others nodes
+		 if(flag==1){
+			 for(int i=0;i<numOfVertex;i++){
+			 		 if(!vertexMap[i].getDimond()){
+			 			 dist[i]=-1;
+			 		 }
+			 	 }
+		 }
 
+		 //printSolution(dist); // print the costs from the source to all the others nodes.
+		 	 	 	 	 	 	//if a node isn't a goal the distance is -1
+
+
+		 int dest=findMinDist(dist);
 		 std::vector<int> path; //vector of the index of the vertex of the path
 
 		 Node last=nodes[dest];
@@ -330,7 +381,7 @@ std::vector<char> Graph::dijkstra(int**matrix,int src,int dest)
 		 }
 		 path.insert(path.end(),dest);
 
-		 std::cout<<" Shortest path from "<<src<<" to "<<dest<<std::endl;
+		 std::cout<<" Shortest path from "<<src<<" ("<<vertexMap[src].getName()<<") to "<<dest<<"("<<vertexMap[dest].getName()<<")"<<std::endl;
 
 		  //print the path ==> index+ vertex name
 		 for(int i=0;i<path.size();i++){
@@ -351,9 +402,28 @@ std::vector<char> Graph::dijkstra(int**matrix,int src,int dest)
 
 			 }
 		 }
-		 return pathDirection;
+		 return std::make_pair(dest,pathDirection);
+
 
 }
+
+void Graph::updateMap(int dest,int src){
+
+	vertexMap[src].setDimond(false);
+	vertexMap[dest].setGoal(false);
+	vertexMap[dest].setgoalReached(true);
+
+}
+
+int Graph::getSource(){
+	for(int i=0;i<numOfVertex;i++)
+	{
+		if(vertexMap[i].getSokoban())
+			return i;
+	}
+	return -1;
+}
+
 
 
 

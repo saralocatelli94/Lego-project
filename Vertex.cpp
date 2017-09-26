@@ -22,7 +22,7 @@ index(i), name(n){
 }
 
 Vertex::Vertex(int i, std::string n, bool d, bool g, bool s):
-index(i), name(n), dimond(d), goal(g), sokoban(s){
+index(i), name(n), dimond(d), goal(g), sokoban(s), goalReached(false){
     
 }
 
@@ -45,6 +45,13 @@ bool Vertex::getGoal(){
 bool Vertex::getSokoban(){
     return sokoban;
 }
+bool Vertex::getgoalReached(){
+	return goalReached;
+}
+
+void Vertex::setGoal(bool g){
+    goal=g;
+}
 
 void Vertex::setDimond(bool d){
     dimond = d;
@@ -52,6 +59,10 @@ void Vertex::setDimond(bool d){
 
 void Vertex::setSokoban(bool s){
     sokoban = s;
+}
+
+void Vertex::setgoalReached( bool gr){
+	goalReached=gr;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
