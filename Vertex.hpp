@@ -23,6 +23,7 @@ public:
     
     Vertex(int index, std::string name);
     Vertex(int index, std::string name, bool dimond, bool goal, bool sokoban);
+    Vertex(int index, std::string name, bool dimond, bool goal, bool sokoban, char sDirection);
     
     std::vector<Edge> connections;
     
@@ -31,15 +32,20 @@ public:
     bool getDimond();
     bool getGoal();
     bool getSokoban();
+    char getSokobanDirection();
+    int getXPosition();
+    int getYPosition();
     
     void setDimond(bool d);
     void setSokoban(bool s);
+    void setSokobanDirection(char sDirection);
     
 protected:
-    int index;
+    int index, xPosition, yPosition;
     std::string name;
     
     bool dimond, goal, sokoban;
+    char sokobanDirection;
 };
 
 ////////////////////////////////////////////////////////////////

@@ -23,6 +23,7 @@ public:
     void addVertex();
     void addVertex(std::string& name);
     void addVertex(std::string& name, bool& dimond, bool& goal, bool& sokoban);
+    void addVertex(std::string& name, bool& dimond, bool& goal, bool& sokoban, char sokobanDirection);
     void addEdge(unsigned int source, unsigned int target);
     void addEdge(unsigned int source, unsigned int target, unsigned int weight);
     void addEdge(std::string source, std::string target, unsigned int weight);
@@ -34,6 +35,8 @@ public:
     // Acces a vertex:
     Vertex &getVertex(unsigned int i);
     Vertex &getVertex(std::string name);
+    
+    unsigned int getNumOfVertex();
     
     // print graph
     void printGraph();

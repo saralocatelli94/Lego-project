@@ -12,22 +12,9 @@
 #include <sstream>
 #include <vector>
 #include "Graph.hpp"
+#include "AStar.hpp"
 
 using namespace std;
-
-void debugPrint(vector<vector<char>>& map_char, int map_height, int map_width, int n, int m){
-    cout << "- 0 1 2 3 4 5 6 7 8 9" << endl;
-    for (int i = 0 ; i < map_height ; i++){
-        cout << i << " ";
-        for (int j = 0 ; j < map_width ; j++) {
-            if (n == i && m == j)
-                cout << "O ";
-            else
-                cout << map_char[i][j] << " ";
-        }
-        cout << endl;
-    }
-}
 
 int main() {
     
@@ -62,8 +49,9 @@ int main() {
     map.close();
     
     Graph road_map;
-    int costOfDriving = 10;
+    int costOfDriving = 2;
     int costOfTurning = 3;
+    char defaultSokobanDirection = 'n';
     
     /*
      (a) X - wall.
@@ -93,7 +81,10 @@ int main() {
                 else if (map_char[i][j] == 'M') { sokoban = true; }
                 
                 // Add vertex:
-                road_map.addVertex(name, dimond, goal, sokoban);
+                if (map_char[i][j] == 'M')
+                    road_map.addVertex(name, dimond, goal, sokoban, defaultSokobanDirection);
+                else
+                    road_map.addVertex(name, dimond, goal, sokoban);
                 dimond = false, goal = false, sokoban = false;
             }
         }
@@ -156,6 +147,10 @@ int main() {
     }
 
     road_map.printGraph();
+    
+    AStar aStarTest(road_map, road_map.getVertex("63"), road_map.getVertex("18"), 'n');
+    aStarTest.runAStar();
+    
     
     return 0;
 }

@@ -18,12 +18,25 @@ Vertex::~Vertex(){
 
 Vertex::Vertex(int i, std::string n):
 index(i), name(n){
-    
+    xPosition = stoi(n) % 10;
+    yPosition = stoi(n) / 10;
 }
 
 Vertex::Vertex(int i, std::string n, bool d, bool g, bool s):
 index(i), name(n), dimond(d), goal(g), sokoban(s){
-    
+    sokobanDirection = '0';
+    xPosition = stoi(n) % 10;
+    yPosition = stoi(n) / 10;
+}
+
+Vertex::Vertex(int i, std::string n, bool d, bool g, bool s, char sD):
+index(i), name(n), dimond(d), goal(g), sokoban(s){
+    xPosition = stoi(n) % 10;
+    yPosition = stoi(n) / 10;
+    if (s)
+        sokobanDirection = sD;
+    else
+        sokobanDirection = '0';
 }
 
 int Vertex::getIndex(){
@@ -46,12 +59,28 @@ bool Vertex::getSokoban(){
     return sokoban;
 }
 
+char Vertex::getSokobanDirection(){
+    return sokobanDirection;
+}
+
+int Vertex::getXPosition(){
+    return xPosition;
+}
+
+int Vertex::getYPosition(){
+    return yPosition;
+}
+
 void Vertex::setDimond(bool d){
     dimond = d;
 }
 
 void Vertex::setSokoban(bool s){
     sokoban = s;
+}
+
+void Vertex::setSokobanDirection(char sDir){
+    sokobanDirection = sDir;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////

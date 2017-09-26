@@ -31,6 +31,11 @@ void Graph::addVertex(std::string& name, bool& d, bool& g, bool& s){
     numOfVertex++;
 }
 
+void Graph::addVertex(std::string& name, bool& d, bool& g, bool& s, char sDirection){
+    adjList.push_back(Vertex(numOfVertex, name, d, g, s, sDirection));
+    numOfVertex++;
+}
+
 void Graph::addEdge(unsigned int source, unsigned int target){
     if (source > numOfVertex || target > numOfVertex)
     {
@@ -172,6 +177,10 @@ Vertex &Graph::getVertex(std::string n){
     }
     std::cout << "ERROR: No vertex with the name " << n << "." << std::endl;
     return adjList[0];
+}
+
+unsigned int Graph::getNumOfVertex(){
+    return numOfVertex;
 }
 
 void Graph::printGraph(){
