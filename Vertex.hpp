@@ -32,19 +32,22 @@ public:
     bool getDimond();
     bool getGoal();
     bool getSokoban();
+    bool getgoalReached();
     char getSokobanDirection();
     int getXPosition();
     int getYPosition();
     
+    void setGoal(bool g);
     void setDimond(bool d);
     void setSokoban(bool s);
+    void setgoalReached(bool gr);
     void setSokobanDirection(char sDirection);
     
 protected:
     int index, xPosition, yPosition;
     std::string name;
     
-    bool dimond, goal, sokoban;
+    bool dimond, goal, sokoban, goalReached;
     char sokobanDirection;
 };
 

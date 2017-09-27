@@ -23,7 +23,7 @@ index(i), name(n){
 }
 
 Vertex::Vertex(int i, std::string n, bool d, bool g, bool s):
-index(i), name(n), dimond(d), goal(g), sokoban(s){
+index(i), name(n), dimond(d), goal(g), sokoban(s), goalReached(false){
     sokobanDirection = '0';
     xPosition = stoi(n) % 10;
     yPosition = stoi(n) / 10;
@@ -59,6 +59,14 @@ bool Vertex::getSokoban(){
     return sokoban;
 }
 
+bool Vertex::getgoalReached(){
+	return goalReached;
+}
+
+void Vertex::setGoal(bool g){
+    goal=g;
+}
+
 char Vertex::getSokobanDirection(){
     return sokobanDirection;
 }
@@ -77,6 +85,10 @@ void Vertex::setDimond(bool d){
 
 void Vertex::setSokoban(bool s){
     sokoban = s;
+}
+
+void Vertex::setgoalReached( bool gr){
+	goalReached=gr;
 }
 
 void Vertex::setSokobanDirection(char sDir){

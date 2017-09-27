@@ -24,6 +24,7 @@ int main() {
     map.open("map_specs.txt");
     if (!map.is_open()) {
         cerr << "ERROR: Could not open map description file." << endl;
+        return 0;
     }
     else {
         int line_count = 0;
@@ -147,6 +148,31 @@ int main() {
     }
 
     road_map.printGraph();
+    int** adjMatrix=road_map.printAdjMatrix();
+
+    int src=0;
+    vector<int> diamondVertex=road_map.getDiamondsID();
+
+
+    //sokoban solver
+    int source=road_map.getSource();
+    int i=0;
+    while(numOfDimonds>0){
+
+        std::cout<<std::endl<<"** FROM SOKOBAN TO DIAMOND "<<std::endl;
+        std::pair<int,std::vector<char>> d=road_map.dijkstra(adjMatrix, source,1);
+        std::cout<<std::endl<<"** FROM DIAMOND to goal "<<std::endl;
+    	std::cout<<"Diamond in vertex :"<<d.first<<std::endl;
+        std::pair<int,std::vector<char>> g=road_map.dijkstra(adjMatrix, d.first,0);
+        road_map.updateMap(g.first,d.first);
+
+        i=i+1;
+        numOfDimonds--;
+        source=g.first;
+
+    }
+
+
     
     AStar aStarTest(road_map, road_map.getVertex("63"), road_map.getVertex("18"), 'n');
     aStarTest.runAStar();
