@@ -13,13 +13,19 @@
 #include <vector>
 #include "Graph.hpp"
 #include "AStar.hpp"
+#include "PathDrawer.hpp"
+#include "Image.hpp"
+#include "PPMLoader.hpp"
+
+using namespace rw::sensor;
+using namespace rw::loaders;
 
 using namespace std;
 
 int main() {
     
     vector<vector<char>> map_char;
-    int map_width, map_height, numOfDimonds;
+    int map_width = 0, map_height = 0, numOfDimonds = 0;
     ifstream map;
     map.open("map_specs.txt");
     if (!map.is_open()) {
@@ -50,8 +56,7 @@ int main() {
     map.close();
     
     Graph road_map;
-    int costOfDriving = 2;
-    int costOfTurning = 3;
+    int costOfDriving = 10;
     char defaultSokobanDirection = 'n';
     
     /*
@@ -146,14 +151,17 @@ int main() {
             }
         }
     }
-
-    road_map.printGraph();
-
-
     
-    AStar aStarTest(road_map, road_map.getVertex("63"), road_map.getVertex("18"), 'n');
+    road_map.printGraph();
+    
+    //AStar aStarTest(road_map, road_map.getVertex("63"), road_map.getVertex("18"), 'n');
+    AStar aStarTest(road_map, road_map.getVertex("18"), road_map.getVertex("63"), 'n');
     aStarTest.runAStar();
     
+    std::vector<VertexList> path = aStarTest.getPath();
+    
+    PathDrawer Test(map_width, map_height, road_map, path);
+    Test.drawPathAndSave("Map_test.ppm");
     
     return 0;
 }

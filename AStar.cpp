@@ -26,7 +26,7 @@ void AStar::runAStar(){
     
     // Add startVertex to visited list:
     vertexClosedList.push_back(VertexList(&map.getVertex(currentVertexIndex), NULL,
-                                          0, pythagoras(vStart, vGoal),
+                                          0, heuristicDistance(vStart, vGoal),
                                           map.getVertex(currentVertexIndex).getSokobanDirection()));
     
     int openListIndex = 0;
@@ -41,7 +41,6 @@ void AStar::runAStar(){
              TODO:
              Impliment check for each vertex:
              - Check if the connected vertex contains a dimond. If so, you can't move there.
-             - Compair the direction of the robot, and the edge. Update the direction of the robot corrosponsingly
              */
             
             // Check if the new vertex is allready in vertexOpenList
@@ -70,41 +69,16 @@ void AStar::runAStar(){
             if (!prevAddedToOpenList && !prevAddedToClosedList)
             {
                 // See if ro robot needs to turn 90 degree
-                double weight = 0;
-                if (vertexClosedList[closedListIndex].orientationOfRobot == map.getVertex(currentVertexIndex).connections[i].getDirection())
-                {
-                    weight = vertexClosedList[closedListIndex].costTravel + map.getVertex(currentVertexIndex).connections[i].getWeight();
-                } else {
-                    weight = vertexClosedList[closedListIndex].costTravel + map.getVertex(currentVertexIndex).connections[i].getWeight() * turningMultiplyer;
-                }
+                double weight = calcWeight(vertexClosedList[closedListIndex], map.getVertex(currentVertexIndex).connections[i]);
                 
                 // See of the robot should revers:
-                char orientation;
-                if (vertexClosedList[closedListIndex].orientationOfRobot == 'n' && map.getVertex(currentVertexIndex).connections[i].getDirection() == 's')
-                {
-                    orientation = 'n';
-                }
-                else if (vertexClosedList[closedListIndex].orientationOfRobot == 'e' && map.getVertex(currentVertexIndex).connections[i].getDirection() == 'w')
-                {
-                    orientation = 'e';
-                }
-                else if (vertexClosedList[closedListIndex].orientationOfRobot == 's' && map.getVertex(currentVertexIndex).connections[i].getDirection() == 'n')
-                {
-                    orientation = 's';
-                }
-                else if (vertexClosedList[closedListIndex].orientationOfRobot == 'w' && map.getVertex(currentVertexIndex).connections[i].getDirection() == 'e')
-                {
-                    orientation = 'w';
-                }
-                else
-                {
-                    orientation = map.getVertex(currentVertexIndex).connections[i].getDirection();
-                }
-                
+                char orientation = calcOrientation(vertexClosedList[closedListIndex].orientationOfRobot,
+                                                   map.getVertex(currentVertexIndex).connections[i].getDirection());
+
                 vertexOpenList.push_back(VertexList(map.getVertex(currentVertexIndex).connections[i].getTarget(),
                                                     &map.getVertex(currentVertexIndex),
                                                     weight,
-                                                    2*pythagoras(vGoal, *map.getVertex(currentVertexIndex).connections[i].getTarget()),
+                                                    heuristicDistance(vGoal, *map.getVertex(currentVertexIndex).connections[i].getTarget()),
                                                     orientation));
             }
             // Check if new route is cheaper than prev found route:
@@ -114,36 +88,11 @@ void AStar::runAStar(){
                     (map.getVertex(currentVertexIndex).connections[i].getWeight() + vertexClosedList[closedListIndex].costTravel))
                 {
                     // See if ro robot needs to turn 90 degree
-                    double weight = 0;
-                    if (vertexClosedList[closedListIndex].orientationOfRobot == map.getVertex(currentVertexIndex).connections[i].getDirection())
-                    {
-                        weight = vertexClosedList[closedListIndex].costTravel + map.getVertex(currentVertexIndex).connections[i].getWeight();
-                    } else {
-                        weight = vertexClosedList[closedListIndex].costTravel + map.getVertex(currentVertexIndex).connections[i].getWeight() * turningMultiplyer;
-                    }
+                    double weight = calcWeight(vertexClosedList[closedListIndex], map.getVertex(currentVertexIndex).connections[i]);
                     
                     // See of the robot should revers:
-                    char orientation;
-                    if (vertexClosedList[closedListIndex].orientationOfRobot == 'n' && map.getVertex(currentVertexIndex).connections[i].getDirection() == 's')
-                    {
-                        orientation = 'n';
-                    }
-                    else if (vertexClosedList[closedListIndex].orientationOfRobot == 'e' && map.getVertex(currentVertexIndex).connections[i].getDirection() == 'w')
-                    {
-                        orientation = 'e';
-                    }
-                    else if (vertexClosedList[closedListIndex].orientationOfRobot == 's' && map.getVertex(currentVertexIndex).connections[i].getDirection() == 'n')
-                    {
-                        orientation = 's';
-                    }
-                    else if (vertexClosedList[closedListIndex].orientationOfRobot == 'w' && map.getVertex(currentVertexIndex).connections[i].getDirection() == 'e')
-                    {
-                        orientation = 'w';
-                    }
-                    else
-                    {
-                        orientation = map.getVertex(currentVertexIndex).connections[i].getDirection();
-                    }
+                    char orientation = calcOrientation(vertexClosedList[closedListIndex].orientationOfRobot,
+                                                       map.getVertex(currentVertexIndex).connections[i].getDirection());
                     
                     vertexOpenList[openListIndex].vertexPrevious = map.getVertex(currentVertexIndex).connections[i].getTarget();
                     vertexOpenList[openListIndex].costTravel = weight;
@@ -199,6 +148,10 @@ void AStar::runAStar(){
     printVertexToGoal();
 }
 
+std::vector<VertexList> AStar::getPath(){
+    return vertexToGoal;
+}
+
 void AStar::printVertexToGoal(){
     std::cout << "Printing the road to goal:\n";
     std::cout << std::setw(6) << "Index:";
@@ -228,8 +181,59 @@ bool AStar::validStartAndGoal(){
     }
 }
 
-double AStar::pythagoras(Vertex current, Vertex goal){
-    return sqrt((goal.getXPosition()-current.getXPosition())*(goal.getXPosition()-current.getXPosition()) + (goal.getYPosition()-current.getYPosition())*(goal.getYPosition()-current.getYPosition()));
+double AStar::heuristicDistance(Vertex current, Vertex goal){
+    return 5*sqrt((goal.getXPosition()-current.getXPosition())*(goal.getXPosition()-current.getXPosition()) + (goal.getYPosition()-current.getYPosition())*(goal.getYPosition()-current.getYPosition()));
+}
+
+double AStar::calcWeight(VertexList closedListVertex, Edge newDirection){
+    double weight = 0;
+    
+    if (closedListVertex.orientationOfRobot == 'n' && (newDirection.getDirection() == 'n' || newDirection.getDirection() == 's'))
+    {
+        weight = closedListVertex.costTravel + newDirection.getWeight();
+    }
+    else if (closedListVertex.orientationOfRobot == 'e' && (newDirection.getDirection() == 'e' || newDirection.getDirection() == 'w'))
+    {
+        weight = closedListVertex.costTravel + newDirection.getWeight();
+    }
+    else if (closedListVertex.orientationOfRobot == 's' && (newDirection.getDirection() == 's' || newDirection.getDirection() == 'n'))
+    {
+        weight = closedListVertex.costTravel + newDirection.getWeight();
+    }
+    else if (closedListVertex.orientationOfRobot == 'w' && (newDirection.getDirection() == 'w' || newDirection.getDirection() == 'e'))
+    {
+        weight = closedListVertex.costTravel + newDirection.getWeight();
+    }
+    else {
+        weight = closedListVertex.costTravel + newDirection.getWeight()*turningMultiplyer;
+    }
+    
+    return weight;
+}
+
+char AStar::calcOrientation(char currentOrientation, char edgeDirection){
+    char orientation;
+    if (currentOrientation == 'n' && edgeDirection == 's')
+    {
+        orientation = 'n';
+    }
+    else if (currentOrientation == 'e' && edgeDirection == 'w')
+    {
+        orientation = 'e';
+    }
+    else if (currentOrientation == 's' && edgeDirection == 'n')
+    {
+        orientation = 's';
+    }
+    else if (currentOrientation == 'w' && edgeDirection == 'e')
+    {
+        orientation = 'w';
+    }
+    else
+    {
+        orientation = edgeDirection;
+    }
+    return orientation;
 }
 
 AStar::~AStar(){

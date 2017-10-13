@@ -24,6 +24,7 @@ public:
     AStar(Graph roadMap, Vertex vertexStart, Vertex vertexGoal, char directionGoal);
     
     void runAStar();
+    std::vector<VertexList> getPath();
     
     void printVertexToGoal();
     
@@ -41,8 +42,10 @@ protected:
     
 private:
     bool validStartAndGoal();
-    double pythagoras(Vertex current, Vertex goal);
-    double const turningMultiplyer = 1.25;
+    double heuristicDistance(Vertex current, Vertex goal);
+    double calcWeight(VertexList closedListVertex, Edge newDirection);
+    char calcOrientation(char currentOrientation, char edgeDirection);
+    double const turningMultiplyer = 1.75;
 };
 
 #endif /* AStar_hpp */

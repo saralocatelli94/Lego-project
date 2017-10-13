@@ -11,7 +11,7 @@
 #include "Graph.hpp"
 #include "Node.h"
 
-Graph::Graph(){
+Graph::Graph() {
     numOfVertex = 0;
 }
 
@@ -323,7 +323,9 @@ std::pair<int,std::vector<char>> Graph::dijkstra(int**matrix,int src,bool flag)
 
 		 int dist[numOfVertex];     //  dist[i] will hold the shortest distance from src to i
 		 bool sptSet[numOfVertex]; // sptSet[i] is true if vertex i has already been processed
-		 Node nodes[numOfVertex];
+    //Node* nodes;
+    //nodes = (Node*) calloc(numOfVertex, sizeof(Node));
+    Node *nodes = new Node[numOfVertex];
 		 // init
 		 for (int i = 0; i < numOfVertex; i++)
 			dist[i] = INT_MAX, sptSet[i] = false, nodes[i]=Node(i);
