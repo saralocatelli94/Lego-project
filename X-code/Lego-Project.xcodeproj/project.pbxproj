@@ -7,7 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5A57B1351F90C97800CF8EE2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A57B1341F90C97800CF8EE2 /* main.cpp */; };
+		5A57B14E1F90C9AB00CF8EE2 /* AStar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A57B13B1F90C9AB00CF8EE2 /* AStar.cpp */; };
+		5A57B14F1F90C9AB00CF8EE2 /* Graph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A57B13D1F90C9AB00CF8EE2 /* Graph.cpp */; };
+		5A57B1501F90C9AB00CF8EE2 /* Image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A57B13F1F90C9AB00CF8EE2 /* Image.cpp */; };
+		5A57B1511F90C9AB00CF8EE2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A57B1421F90C9AB00CF8EE2 /* main.cpp */; };
+		5A57B1521F90C9AB00CF8EE2 /* Node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A57B1441F90C9AB00CF8EE2 /* Node.cpp */; };
+		5A57B1531F90C9AB00CF8EE2 /* PathDrawer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A57B1461F90C9AB00CF8EE2 /* PathDrawer.cpp */; };
+		5A57B1541F90C9AB00CF8EE2 /* PPMLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A57B1481F90C9AB00CF8EE2 /* PPMLoader.cpp */; };
+		5A57B1551F90C9AB00CF8EE2 /* Vertex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A57B14A1F90C9AB00CF8EE2 /* Vertex.cpp */; };
+		5A57B1561F90C9AB00CF8EE2 /* VertexList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A57B14C1F90C9AB00CF8EE2 /* VertexList.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,7 +32,25 @@
 
 /* Begin PBXFileReference section */
 		5A57B1311F90C97800CF8EE2 /* Lego-Project */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Lego-Project"; sourceTree = BUILT_PRODUCTS_DIR; };
-		5A57B1341F90C97800CF8EE2 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		5A57B13B1F90C9AB00CF8EE2 /* AStar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AStar.cpp; path = ../../AStar.cpp; sourceTree = "<group>"; };
+		5A57B13C1F90C9AB00CF8EE2 /* AStar.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AStar.hpp; path = ../../AStar.hpp; sourceTree = "<group>"; };
+		5A57B13D1F90C9AB00CF8EE2 /* Graph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Graph.cpp; path = ../../Graph.cpp; sourceTree = "<group>"; };
+		5A57B13E1F90C9AB00CF8EE2 /* Graph.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Graph.hpp; path = ../../Graph.hpp; sourceTree = "<group>"; };
+		5A57B13F1F90C9AB00CF8EE2 /* Image.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Image.cpp; path = ../../Image.cpp; sourceTree = "<group>"; };
+		5A57B1401F90C9AB00CF8EE2 /* Image.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Image.hpp; path = ../../Image.hpp; sourceTree = "<group>"; };
+		5A57B1411F90C9AB00CF8EE2 /* macros.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = macros.hpp; path = ../../macros.hpp; sourceTree = "<group>"; };
+		5A57B1421F90C9AB00CF8EE2 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../../main.cpp; sourceTree = "<group>"; };
+		5A57B1431F90C9AB00CF8EE2 /* map_specs.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = map_specs.txt; path = ../../map_specs.txt; sourceTree = "<group>"; };
+		5A57B1441F90C9AB00CF8EE2 /* Node.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Node.cpp; path = ../../Node.cpp; sourceTree = "<group>"; };
+		5A57B1451F90C9AB00CF8EE2 /* Node.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Node.h; path = ../../Node.h; sourceTree = "<group>"; };
+		5A57B1461F90C9AB00CF8EE2 /* PathDrawer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PathDrawer.cpp; path = ../../PathDrawer.cpp; sourceTree = "<group>"; };
+		5A57B1471F90C9AB00CF8EE2 /* PathDrawer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PathDrawer.hpp; path = ../../PathDrawer.hpp; sourceTree = "<group>"; };
+		5A57B1481F90C9AB00CF8EE2 /* PPMLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PPMLoader.cpp; path = ../../PPMLoader.cpp; sourceTree = "<group>"; };
+		5A57B1491F90C9AB00CF8EE2 /* PPMLoader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PPMLoader.hpp; path = ../../PPMLoader.hpp; sourceTree = "<group>"; };
+		5A57B14A1F90C9AB00CF8EE2 /* Vertex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Vertex.cpp; path = ../../Vertex.cpp; sourceTree = "<group>"; };
+		5A57B14B1F90C9AB00CF8EE2 /* Vertex.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Vertex.hpp; path = ../../Vertex.hpp; sourceTree = "<group>"; };
+		5A57B14C1F90C9AB00CF8EE2 /* VertexList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VertexList.cpp; path = ../../VertexList.cpp; sourceTree = "<group>"; };
+		5A57B14D1F90C9AB00CF8EE2 /* VertexList.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = VertexList.hpp; path = ../../VertexList.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +83,25 @@
 		5A57B1331F90C97800CF8EE2 /* Lego-Project */ = {
 			isa = PBXGroup;
 			children = (
-				5A57B1341F90C97800CF8EE2 /* main.cpp */,
+				5A57B1421F90C9AB00CF8EE2 /* main.cpp */,
+				5A57B13B1F90C9AB00CF8EE2 /* AStar.cpp */,
+				5A57B13C1F90C9AB00CF8EE2 /* AStar.hpp */,
+				5A57B13D1F90C9AB00CF8EE2 /* Graph.cpp */,
+				5A57B13E1F90C9AB00CF8EE2 /* Graph.hpp */,
+				5A57B13F1F90C9AB00CF8EE2 /* Image.cpp */,
+				5A57B1401F90C9AB00CF8EE2 /* Image.hpp */,
+				5A57B1411F90C9AB00CF8EE2 /* macros.hpp */,
+				5A57B1431F90C9AB00CF8EE2 /* map_specs.txt */,
+				5A57B1441F90C9AB00CF8EE2 /* Node.cpp */,
+				5A57B1451F90C9AB00CF8EE2 /* Node.h */,
+				5A57B1461F90C9AB00CF8EE2 /* PathDrawer.cpp */,
+				5A57B1471F90C9AB00CF8EE2 /* PathDrawer.hpp */,
+				5A57B1481F90C9AB00CF8EE2 /* PPMLoader.cpp */,
+				5A57B1491F90C9AB00CF8EE2 /* PPMLoader.hpp */,
+				5A57B14A1F90C9AB00CF8EE2 /* Vertex.cpp */,
+				5A57B14B1F90C9AB00CF8EE2 /* Vertex.hpp */,
+				5A57B14C1F90C9AB00CF8EE2 /* VertexList.cpp */,
+				5A57B14D1F90C9AB00CF8EE2 /* VertexList.hpp */,
 			);
 			path = "Lego-Project";
 			sourceTree = "<group>";
@@ -119,7 +163,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5A57B1351F90C97800CF8EE2 /* main.cpp in Sources */,
+				5A57B1501F90C9AB00CF8EE2 /* Image.cpp in Sources */,
+				5A57B1551F90C9AB00CF8EE2 /* Vertex.cpp in Sources */,
+				5A57B1541F90C9AB00CF8EE2 /* PPMLoader.cpp in Sources */,
+				5A57B14F1F90C9AB00CF8EE2 /* Graph.cpp in Sources */,
+				5A57B1511F90C9AB00CF8EE2 /* main.cpp in Sources */,
+				5A57B1531F90C9AB00CF8EE2 /* PathDrawer.cpp in Sources */,
+				5A57B14E1F90C9AB00CF8EE2 /* AStar.cpp in Sources */,
+				5A57B1521F90C9AB00CF8EE2 /* Node.cpp in Sources */,
+				5A57B1561F90C9AB00CF8EE2 /* VertexList.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -246,6 +298,7 @@
 				5A57B13A1F90C97800CF8EE2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
