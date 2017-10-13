@@ -118,6 +118,7 @@ void PathDrawer::drawPath(){
                _ROBOT_WIDTH, PATH_ROBOT, PATH_ROBOT, PATH_ROBOT);
     
     drawStartAndGoalPoint();
+    drawArrowsOnAllVertex();
 }
 
 void PathDrawer::drawMapAndSave(std::string fileName){
@@ -172,6 +173,94 @@ void PathDrawer::drawCircle(double x, double y, int radius, int blue, int green,
         for (int j = y-radius ; j < y+radius ; j++) {
             if (radius > sqrt((x-i)*(x-i) + (y-j)*(y-j))) {
                 img->setPixel8S(i, j, red, green, blue);
+            }
+        }
+    }
+}
+
+void PathDrawer::drawArrowsOnAllVertex(){
+    for (int i = 0 ; i < path->size() ; i++) {
+        char direction = path->at(i).orientationOfRobot;
+        int cutOfArrow = _MAP_SCALER/3.5;
+        int lenghtOfArrow = _MAP_SCALER - cutOfArrow;
+        
+        // First draw a vertical or horizontal line:
+        // Vertical:
+        if (direction == 'n' || direction == 's') {
+            int x = path->at(i).vertexTarget->getXPosition()*_MAP_SCALER + _MAP_SCALER/2;
+            int y = path->at(i).vertexTarget->getYPosition()*_MAP_SCALER;
+            for (int j = y+cutOfArrow ; j < y+lenghtOfArrow ; j++) {
+                img->setPixel8S(x, j, BLACK, BLACK, BLACK);
+                //Make the line 3 pixels thick:
+                img->setPixel8S(x+1, j, BLACK, BLACK, BLACK);
+                img->setPixel8S(x-1, j, BLACK, BLACK, BLACK);
+            }
+        }
+        // Horizontal:
+        else if (direction == 'w' || direction == 'e') {
+            int x = path->at(i).vertexTarget->getXPosition()*_MAP_SCALER;
+            int y = path->at(i).vertexTarget->getYPosition()*_MAP_SCALER + _MAP_SCALER/2;
+            for (int j = x+cutOfArrow ; j < x+lenghtOfArrow ; j++) {
+                img->setPixel8S(j, y, BLACK, BLACK, BLACK);
+                //Make the line 3 pixels thick:
+                img->setPixel8S(j, y+1, BLACK, BLACK, BLACK);
+                img->setPixel8S(j, y-1, BLACK, BLACK, BLACK);
+            }
+        }
+        else { std::cerr << "Error: Vertex has no direction." << std::endl; }
+        
+        // Next, Draw two 45 degree lines:
+        int lenghtOfArrowHead = lenghtOfArrow/5;
+        if (direction == 'n') {
+            int x = path->at(i).vertexTarget->getXPosition()*_MAP_SCALER + _MAP_SCALER/2;
+            int y = path->at(i).vertexTarget->getYPosition()*_MAP_SCALER + cutOfArrow;
+            for (int j = 0 ; j < lenghtOfArrowHead ; j++) {
+                img->setPixel8S(x+j, y+j, BLACK, BLACK, BLACK);
+                img->setPixel8S(x-j, y+j, BLACK, BLACK, BLACK);
+                //Make the line 3 pixels thick:
+                img->setPixel8S(x+j, y+j+1, BLACK, BLACK, BLACK);
+                img->setPixel8S(x-j, y+j+1, BLACK, BLACK, BLACK);
+                img->setPixel8S(x+j, y+j+2, BLACK, BLACK, BLACK);
+                img->setPixel8S(x-j, y+j+2, BLACK, BLACK, BLACK);
+            }
+        }
+        else if (direction == 'e') {
+            int x = path->at(i).vertexTarget->getXPosition()*_MAP_SCALER + _MAP_SCALER - cutOfArrow;
+            int y = path->at(i).vertexTarget->getYPosition()*_MAP_SCALER + _MAP_SCALER/2;
+            for (int j = 0 ; j < lenghtOfArrowHead ; j++) {
+                img->setPixel8S(x-j, y+j, BLACK, BLACK, BLACK);
+                img->setPixel8S(x-j, y-j, BLACK, BLACK, BLACK);
+                //Make the line 3 pixels thick:
+                img->setPixel8S(x-j-1, y+j, BLACK, BLACK, BLACK);
+                img->setPixel8S(x-j-1, y-j, BLACK, BLACK, BLACK);
+                img->setPixel8S(x-j-2, y+j, BLACK, BLACK, BLACK);
+                img->setPixel8S(x-j-2, y-j, BLACK, BLACK, BLACK);
+            }
+        }
+        else if (direction == 's') {
+            int x = path->at(i).vertexTarget->getXPosition()*_MAP_SCALER + _MAP_SCALER/2;
+            int y = path->at(i).vertexTarget->getYPosition()*_MAP_SCALER + _MAP_SCALER - cutOfArrow;
+            for (int j = 0 ; j < lenghtOfArrowHead ; j++) {
+                img->setPixel8S(x+j, y-j, BLACK, BLACK, BLACK);
+                img->setPixel8S(x-j, y-j, BLACK, BLACK, BLACK);
+                //Make the line 3 pixels thick:
+                img->setPixel8S(x+j, y-j-1, BLACK, BLACK, BLACK);
+                img->setPixel8S(x-j, y-j-1, BLACK, BLACK, BLACK);
+                img->setPixel8S(x+j, y-j-2, BLACK, BLACK, BLACK);
+                img->setPixel8S(x-j, y-j-2, BLACK, BLACK, BLACK);
+            }
+        }
+        else if (direction == 'w') {
+            int x = path->at(i).vertexTarget->getXPosition()*_MAP_SCALER + cutOfArrow;
+            int y = path->at(i).vertexTarget->getYPosition()*_MAP_SCALER + _MAP_SCALER/2;
+            for (int j = 0 ; j < lenghtOfArrowHead ; j++) {
+                img->setPixel8S(x+j, y+j, BLACK, BLACK, BLACK);
+                img->setPixel8S(x+j, y-j, BLACK, BLACK, BLACK);
+                //Make the line 3 pixels thick:
+                img->setPixel8S(x+j+1, y+j, BLACK, BLACK, BLACK);
+                img->setPixel8S(x+j+1, y-j, BLACK, BLACK, BLACK);
+                img->setPixel8S(x+j+2, y+j, BLACK, BLACK, BLACK);
+                img->setPixel8S(x+j+2, y-j, BLACK, BLACK, BLACK);
             }
         }
     }

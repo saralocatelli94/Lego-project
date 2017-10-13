@@ -154,8 +154,8 @@ int main() {
     
     road_map.printGraph();
     
-    //AStar aStarTest(road_map, road_map.getVertex("63"), road_map.getVertex("18"), 'n');
-    AStar aStarTest(road_map, road_map.getVertex("18"), road_map.getVertex("63"), 'n');
+    AStar aStarTest(road_map, road_map.getVertex("63"), road_map.getVertex("18"), 'n');
+    //AStar aStarTest(road_map, road_map.getVertex("18"), road_map.getVertex("63"), 'n');
     aStarTest.runAStar();
     
     std::vector<VertexList> path = aStarTest.getPath();

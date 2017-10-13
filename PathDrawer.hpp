@@ -49,6 +49,7 @@ private:
     
     void drawBlackGrid();
     void drawCircle(double x, double y, int radius, int blue, int green, int red);
+    void drawArrowsOnAllVertex();
     
     void drawStartAndGoalPoint();
     
