@@ -154,14 +154,13 @@ int main() {
     
     road_map.printGraph();
     
-    AStar aStarTest(road_map, road_map.getVertex("63"), road_map.getVertex("18"), 'n');
+    AStar aStarTest(road_map, road_map.getVertex("63"), road_map.getVertex("22"), 'n');
     //AStar aStarTest(road_map, road_map.getVertex("18"), road_map.getVertex("63"), 'n');
-    aStarTest.runAStar();
-    
-    std::vector<VertexList> path = aStarTest.getPath();
-    
-    PathDrawer Test(map_width, map_height, road_map, path);
-    Test.drawPathAndSave("Map_test.ppm");
-    
+    if (aStarTest.runAStar()) {
+        std::vector<VertexList> path = aStarTest.getPath();
+        
+        PathDrawer Test(map_width, map_height, road_map, path);
+        Test.drawPathAndSave("Map_test.ppm");
+    }
     return 0;
 }

@@ -23,14 +23,14 @@ index(i), name(n){
 }
 
 Vertex::Vertex(int i, std::string n, bool d, bool g, bool s):
-index(i), name(n), dimond(d), goal(g), sokoban(s), goalReached(false){
+index(i), name(n), diamond(d), goal(g), sokoban(s), goalReached(false){
     sokobanDirection = '0';
     xPosition = stoi(n) % 10;
     yPosition = stoi(n) / 10;
 }
 
 Vertex::Vertex(int i, std::string n, bool d, bool g, bool s, char sD):
-index(i), name(n), dimond(d), goal(g), sokoban(s){
+index(i), name(n), diamond(d), goal(g), sokoban(s){
     xPosition = stoi(n) % 10;
     yPosition = stoi(n) / 10;
     if (s)
@@ -47,8 +47,8 @@ std::string Vertex::getName(){
     return name;
 }
 
-bool Vertex::getDimond(){
-    return dimond;
+bool Vertex::getDiamond(){
+    return diamond;
 }
 
 bool Vertex::getGoal(){
@@ -79,8 +79,8 @@ int Vertex::getYPosition(){
     return yPosition;
 }
 
-void Vertex::setDimond(bool d){
-    dimond = d;
+void Vertex::setDiamond(bool d){
+    diamond = d;
 }
 
 void Vertex::setSokoban(bool s){

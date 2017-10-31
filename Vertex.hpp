@@ -22,14 +22,14 @@ public:
     ~Vertex();
     
     Vertex(int index, std::string name);
-    Vertex(int index, std::string name, bool dimond, bool goal, bool sokoban);
-    Vertex(int index, std::string name, bool dimond, bool goal, bool sokoban, char sDirection);
+    Vertex(int index, std::string name, bool diamond, bool goal, bool sokoban);
+    Vertex(int index, std::string name, bool diamond, bool goal, bool sokoban, char sDirection);
     
     std::vector<Edge> connections;
     
     int getIndex();
     std::string getName();
-    bool getDimond();
+    bool getDiamond();
     bool getGoal();
     bool getSokoban();
     bool getgoalReached();
@@ -38,7 +38,7 @@ public:
     int getYPosition();
     
     void setGoal(bool g);
-    void setDimond(bool d);
+    void setDiamond(bool d);
     void setSokoban(bool s);
     void setgoalReached(bool gr);
     void setSokobanDirection(char sDirection);
@@ -47,7 +47,7 @@ protected:
     int index, xPosition, yPosition;
     std::string name;
     
-    bool dimond, goal, sokoban, goalReached;
+    bool diamond, goal, sokoban, goalReached;
     char sokobanDirection;
 };
 

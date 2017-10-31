@@ -23,7 +23,7 @@ public:
     
     AStar(Graph roadMap, Vertex vertexStart, Vertex vertexGoal, char directionGoal);
     
-    void runAStar();
+    bool runAStar();
     std::vector<VertexList> getPath();
     
     void printVertexToGoal();

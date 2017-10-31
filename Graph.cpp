@@ -201,7 +201,7 @@ void Graph::printGraph(){
     	vertexMap[adjList[i].getIndex()]=getVertex(adjList[i].getName());
         std::cout << std::setw(6) << adjList[i].getIndex();
         std::cout << std::setw(7) << adjList[i].getName();
-        std::cout << std::setw(10) << adjList[i].getDimond();
+        std::cout << std::setw(10) << adjList[i].getDiamond();
         std::cout << std::setw(7) << adjList[i].getGoal();
         std::cout << std::setw(10) << adjList[i].getSokoban();
         for (int j = 0 ; j < getVertex(i).connections.size() ; j++)
@@ -322,7 +322,7 @@ int Graph::findMinDist(int dist[]){
 std::vector<int > Graph::getDiamondsID(){
 	std::vector<int> result;
 	for(int i=0;i<numOfVertex;i++){
-		if(vertexMap[i].getDimond())
+		if(vertexMap[i].getDiamond())
 			result.push_back(i);
 	}
 	return result;
@@ -387,7 +387,7 @@ std::pair<int,std::vector<char>> Graph::dijkstra(int**matrix,int src,bool flag)
 
 		 if(flag==1){
 			 for(int i=0;i<numOfVertex;i++){
-			 		 if(!vertexMap[i].getDimond()){
+			 		 if(!vertexMap[i].getDiamond()){
 			 			 dist[i]=-1;
 			 		 }
 			 	 }
@@ -436,7 +436,7 @@ std::pair<int,std::vector<char>> Graph::dijkstra(int**matrix,int src,bool flag)
 
 void Graph::updateMap(int dest,int src){
 
-	vertexMap[src].setDimond(false);
+	vertexMap[src].setDiamond(false);
 	vertexMap[dest].setGoal(false);
 	vertexMap[dest].setgoalReached(true);
 
@@ -489,27 +489,27 @@ void Graph::createGraphRepresentation(){
      */
     graphRepresentation.erase();
     for (int i = 0 ; i < numOfVertex ; i++) {
-        if (!getVertex(i).getGoal() && !getVertex(i).getDimond() && !getVertex(i).getSokoban()) {
+        if (!getVertex(i).getGoal() && !getVertex(i).getDiamond() && !getVertex(i).getSokoban()) {
             // Free space
             graphRepresentation += ".";
         }
-        else if (!getVertex(i).getGoal() && !getVertex(i).getDimond() && getVertex(i).getSokoban()) {
+        else if (!getVertex(i).getGoal() && !getVertex(i).getDiamond() && getVertex(i).getSokoban()) {
             // Sokoban
             graphRepresentation += "M";
         }
-        else if (getVertex(i).getGoal() && !getVertex(i).getDimond() && getVertex(i).getSokoban()) {
+        else if (getVertex(i).getGoal() && !getVertex(i).getDiamond() && getVertex(i).getSokoban()) {
             // Sokoban on goal
             graphRepresentation += "N";
         }
-        else if (getVertex(i).getGoal() && !getVertex(i).getDimond()) {
+        else if (getVertex(i).getGoal() && !getVertex(i).getDiamond()) {
             // Goal
             graphRepresentation += "G";
         }
-        else if (!getVertex(i).getGoal() && getVertex(i).getDimond()) {
+        else if (!getVertex(i).getGoal() && getVertex(i).getDiamond()) {
             // Diamond
             graphRepresentation += "J";
         }
-        else if (getVertex(i).getGoal() && getVertex(i).getDimond()) {
+        else if (getVertex(i).getGoal() && getVertex(i).getDiamond()) {
             // Diamond on goal
             graphRepresentation += "Q";
         }

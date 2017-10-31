@@ -17,9 +17,10 @@ map(roadMap), vStart(vertexStart), vGoal(vertexGoal), directionGoal(dirGoal){
     //orientationOfRobot = vStart.getSokobanDirection();
 }
 
-void AStar::runAStar(){
+bool AStar::runAStar(){
     if (!validStartAndGoal()) {
-        return;
+        std::cerr << "Goal and/or start not valid.\n";
+        return false;
     }
     
     currentVertexIndex = vStart.getIndex();
@@ -66,7 +67,8 @@ void AStar::runAStar(){
             }
             
             // If connection is completly new, add it to vertexOpenList:
-            if (!prevAddedToOpenList && !prevAddedToClosedList)
+            if (!prevAddedToOpenList && !prevAddedToClosedList &&
+                !map.getVertex(currentVertexIndex).connections[i].getTarget()->getDiamond())
             {
                 // See if ro robot needs to turn 90 degree
                 double weight = calcWeight(vertexClosedList[closedListIndex], map.getVertex(currentVertexIndex).connections[i]);
@@ -82,7 +84,8 @@ void AStar::runAStar(){
                                                     orientation));
             }
             // Check if new route is cheaper than prev found route:
-            else if (prevAddedToOpenList && !prevAddedToClosedList)
+            else if (prevAddedToOpenList && !prevAddedToClosedList &&
+                     !map.getVertex(currentVertexIndex).connections[i].getTarget()->getDiamond())
             {
                 if (vertexOpenList[openListIndex].costTravel >
                     (map.getVertex(currentVertexIndex).connections[i].getWeight() + vertexClosedList[closedListIndex].costTravel))
@@ -106,7 +109,7 @@ void AStar::runAStar(){
         if (vertexOpenList.empty())
         {
             std::cerr << "ERROR: No valid path to goal.\n";
-            return;
+            return false;
         }
         
         // Now take the closest vertex to the goal. Add it to vertexClosedList, and remove it from vertexOpenList
@@ -146,6 +149,7 @@ void AStar::runAStar(){
     }
     
     printVertexToGoal();
+    return true;
 }
 
 std::vector<VertexList> AStar::getPath(){

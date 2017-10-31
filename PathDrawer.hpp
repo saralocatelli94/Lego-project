@@ -58,7 +58,7 @@ private:
     
 private:
     // Colors:
-    unsigned int const RED_DIMOND       = 200;
+    unsigned int const RED_DIAMOND      = 200;
     unsigned int const BLUE_SOKOBAN     = 200;
     unsigned int const GREEN_GOAL       = 200;
     unsigned int const GRAY_FREESPACE   = 200;

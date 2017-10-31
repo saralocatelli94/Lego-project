@@ -64,8 +64,8 @@ void PathDrawer::drawMap(){
         int RED = 0, GREEN = 0, BLUE = 0;
         
         // Get the right color:
-        if (roadMap->getVertex(i).getDimond()) {
-            RED = RED_DIMOND;
+        if (roadMap->getVertex(i).getDiamond()) {
+            RED = RED_DIAMOND;
         }
         if (roadMap->getVertex(i).getGoal()) {
             GREEN = GREEN_GOAL;
@@ -75,7 +75,7 @@ void PathDrawer::drawMap(){
         }
         
         // Paint the point:
-        if ((roadMap->getVertex(i).getDimond()) ||
+        if ((roadMap->getVertex(i).getDiamond()) ||
             (roadMap->getVertex(i).getGoal()) ||
             (roadMap->getVertex(i).getSokoban())) {
             drawCircle(x*_MAP_SCALER + _MAP_SCALER/2, y*_MAP_SCALER + _MAP_SCALER/2, (_MAP_SCALER/2 - _OBJECT_BOARDER), BLUE, GREEN, RED);
