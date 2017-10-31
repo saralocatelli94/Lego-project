@@ -42,25 +42,30 @@ public:
     Vertex &getVertex(unsigned int i);
     Vertex &getVertex(std::string name);
 
-    
     unsigned int getNumOfVertex();
     
     // print graph
     void printGraph();
     std::map<int,Vertex> vertexMap; // map for the index of a vertex and the vertex
+    
+    // Operator overload:
+    bool operator==(Graph rhw);
 
 protected:
     std::vector<Vertex> adjList;
-     unsigned int numOfVertex;
-
-
+    unsigned int numOfVertex;
+    
+    // String representing the Graph. Makes it easier to compare graphs
+    std::string graphRepresentation;
     
 private:
     void topSort(Vertex & tempV, std::vector<Vertex*> & stack, std::vector<Vertex*> & visited);
     void printSolution(int dist[]);
 
     int minDistance(int dist[], bool sptSet[]);
-
+    
+    
+    void createGraphRepresentation();
 
 };
 

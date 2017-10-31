@@ -57,7 +57,7 @@ int main() {
     
     Graph road_map;
     int costOfDriving = 10;
-    char defaultSokobanDirection = 'n';
+    char defaultSokobanDirection = 's';
     
     /*
      (a) X - wall.

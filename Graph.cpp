@@ -234,6 +234,26 @@ void Graph::printGraph(){
     }
 }
 
+bool Graph::operator==(Graph rhs){
+    this->createGraphRepresentation();
+    rhs.createGraphRepresentation();
+    return (this->graphRepresentation == rhs.graphRepresentation);
+    
+    // Alternative neglectig robot position:
+    /*
+    for (int i = 0 ; i < this->graphRepresentation.length() ; i++) {
+        if (this->graphRepresentation.at(i) == 'M' || this->graphRepresentation.at(i) == 'N' ||
+            rhs.graphRepresentation.at(i) == 'M' || rhs.graphRepresentation.at(i) == 'N') {
+            break;
+        }
+        else if (this->graphRepresentation.at(i) != rhs.graphRepresentation.at(i)) {
+            return false;
+        }
+    }
+    return true;
+     */
+}
+
 int** Graph::printAdjMatrix(){
 	int size=numOfVertex;
 	int** matrix=0;
@@ -458,4 +478,41 @@ void Graph::topSort(Vertex &tempV, std::vector<Vertex *> & stack, std::vector<Ve
     stack.push_back(&tempV);
 }
 
+void Graph::createGraphRepresentation(){
+    /**
+     Free space:        "."
+     Sokoban:           "M"
+     Sokoban on goal:   "N"
+     Goal:              "G"
+     Diamond:           "J"
+     Diamond on goal:   "Q"
+     */
+    graphRepresentation.erase();
+    for (int i = 0 ; i < numOfVertex ; i++) {
+        if (!getVertex(i).getGoal() && !getVertex(i).getDimond() && !getVertex(i).getSokoban()) {
+            // Free space
+            graphRepresentation += ".";
+        }
+        else if (!getVertex(i).getGoal() && !getVertex(i).getDimond() && getVertex(i).getSokoban()) {
+            // Sokoban
+            graphRepresentation += "M";
+        }
+        else if (getVertex(i).getGoal() && !getVertex(i).getDimond() && getVertex(i).getSokoban()) {
+            // Sokoban on goal
+            graphRepresentation += "N";
+        }
+        else if (getVertex(i).getGoal() && !getVertex(i).getDimond()) {
+            // Goal
+            graphRepresentation += "G";
+        }
+        else if (!getVertex(i).getGoal() && getVertex(i).getDimond()) {
+            // Diamond
+            graphRepresentation += "J";
+        }
+        else if (getVertex(i).getGoal() && getVertex(i).getDimond()) {
+            // Diamond on goal
+            graphRepresentation += "Q";
+        }
+    }
+}
 
