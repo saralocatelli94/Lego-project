@@ -50,6 +50,10 @@ public:
     
     // Operator overload:
     bool operator==(Graph rhw);
+    std::string getGraphRepresentation();
+    
+    // Set information on all vertex's based on string input
+    void setAllVertexInfo(std::string graphRepresentation);
 
 protected:
     std::vector<Vertex> adjList;

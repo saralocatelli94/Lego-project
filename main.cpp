@@ -16,6 +16,7 @@
 #include "PathDrawer.hpp"
 #include "Image.hpp"
 #include "PPMLoader.hpp"
+#include "Solver.hpp"
 
 using namespace rw::sensor;
 using namespace rw::loaders;
@@ -153,6 +154,32 @@ int main() {
     }
     
     road_map.printGraph();
+    Graph goal_map = road_map;
+    
+    for (int i = 0 ; i < goal_map.getNumOfVertex() ; i++) {
+        if (goal_map.getVertex(i).getGoal()){
+            goal_map.getVertex(i).setDiamond(true);
+        }
+        if (goal_map.getVertex(i).getDiamond() &&
+            !goal_map.getVertex(i).getGoal()) {
+            goal_map.getVertex(i).setDiamond(false);
+        }
+    }
+    
+    cout << "Road map string: " << road_map.getGraphRepresentation() << endl;
+    //cout << "Goal map string: " << goal_map.getGraphRepresentation() << endl;
+    
+    Solver solution(road_map, goal_map);
+    solution.startSolver();
+    std::vector<SolverNode> solutionList = solution.getSolution();
+    
+    for (int i = 0 ; i < solutionList.size() ; i++) {
+        cout << solutionList[i].ID << endl;
+    }
+    
+    /*
+    PathDrawer goalMap(map_width, map_height, goal_map);
+    goalMap.drawMapAndSave("goalMap.ppm");
     
     AStar aStarTest(road_map, road_map.getVertex("63"), road_map.getVertex("22"), 'n');
     //AStar aStarTest(road_map, road_map.getVertex("18"), road_map.getVertex("63"), 'n');
@@ -162,5 +189,6 @@ int main() {
         PathDrawer Test(map_width, map_height, road_map, path);
         Test.drawPathAndSave("Map_test.ppm");
     }
+    */
     return 0;
 }

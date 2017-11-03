@@ -108,7 +108,7 @@ bool AStar::runAStar(){
         // Safty check:
         if (vertexOpenList.empty())
         {
-            std::cerr << "ERROR: No valid path to goal.\n";
+            //std::cerr << "ERROR: No valid path to goal.\n";
             return false;
         }
         
@@ -148,7 +148,7 @@ bool AStar::runAStar(){
         }
     }
     
-    printVertexToGoal();
+    //printVertexToGoal();
     return true;
 }
 

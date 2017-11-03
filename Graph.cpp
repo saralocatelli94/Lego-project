@@ -244,7 +244,7 @@ bool Graph::operator==(Graph rhs){
     for (int i = 0 ; i < this->graphRepresentation.length() ; i++) {
         if (this->graphRepresentation.at(i) == 'M' || this->graphRepresentation.at(i) == 'N' ||
             rhs.graphRepresentation.at(i) == 'M' || rhs.graphRepresentation.at(i) == 'N') {
-            break;
+            //break;
         }
         else if (this->graphRepresentation.at(i) != rhs.graphRepresentation.at(i)) {
             return false;
@@ -252,6 +252,11 @@ bool Graph::operator==(Graph rhs){
     }
     return true;
      */
+}
+
+std::string Graph::getGraphRepresentation(){
+    createGraphRepresentation();
+    return graphRepresentation;
 }
 
 int** Graph::printAdjMatrix(){
@@ -476,6 +481,47 @@ void Graph::topSort(Vertex &tempV, std::vector<Vertex *> & stack, std::vector<Ve
         }
     }
     stack.push_back(&tempV);
+}
+
+void Graph::setAllVertexInfo(std::string graphRep){
+    if (numOfVertex != graphRep.length()) {
+        std::cerr << "Error: Can't set info on vertexes based on input string. Num of vertexes dosn't mach lenght of string. \nnumOfVertex: " << numOfVertex << "\nLength of string: " << graphRep.length() << std::endl;
+        return;
+    }
+    /**
+     Free space:        "."
+     Sokoban:           "M"
+     Sokoban on goal:   "N"
+     Goal:              "G"
+     Diamond:           "J"
+     Diamond on goal:   "Q"
+     */
+    for (int i = 0 ; i < numOfVertex ; i++) {
+        if (graphRep.at(i) == '.') {
+            getVertex(i).setDiamond(false);
+            getVertex(i).setSokoban(false);
+        }
+        else if (graphRep.at(i) == 'M') {
+            getVertex(i).setDiamond(false);
+            getVertex(i).setSokoban(true);
+        }
+        else if (graphRep.at(i) == 'N') {
+            getVertex(i).setDiamond(false);
+            getVertex(i).setSokoban(true);
+        }
+        else if (graphRep.at(i) == 'G') {
+            getVertex(i).setDiamond(false);
+            getVertex(i).setSokoban(false);
+        }
+        else if (graphRep.at(i) == 'J') {
+            getVertex(i).setDiamond(true);
+            getVertex(i).setSokoban(false);
+        }
+        else if (graphRep.at(i) == 'Q') {
+            getVertex(i).setDiamond(true);
+            getVertex(i).setSokoban(false);
+        }
+    }
 }
 
 void Graph::createGraphRepresentation(){
