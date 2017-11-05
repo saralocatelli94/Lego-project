@@ -1,0 +1,120 @@
+#define LEFT_MOTOR OUT_A
+#define RIGHT_MOTOR OUT_C
+#define BOTH_MOTOR OUT_AC
+
+#define FORWARD_SPEED_RIGHT 58
+#define FORWARD_SPEED_LEFT 60
+#define REVERSE_SPEED -60
+
+#define LEFT_SENSOR IN_1
+#define RIGHT_SENSOR IN_4
+#define CROSS_SENSOR IN_2
+#define TOP_SENSOR IN_1
+#define LIGHT_LIMIT 48
+#define CROSS_LIMIT 35
+
+bool isTurning = false;
+mutex moveMutex;
+
+task senseLeft()
+{
+
+ while(true)
+ {
+
+  until(!isTurning && (Sensor(LEFT_SENSOR) < LIGHT_LIMIT));  // left sensor is over line
+  //Acquire(moveMutex);
+  Float(LEFT_MOTOR);                                 // turn right
+  //Release(moveMutex);
+  until(Sensor(LEFT_SENSOR) > LIGHT_LIMIT);
+  Wait(5); // ???
+  //Acquire(moveMutex);
+  OnFwd(LEFT_MOTOR, FORWARD_SPEED_LEFT);
+  //Release(moveMutex);
+ }
+}
+
+task senseRight()
+{
+ while(true)
+ {
+  until(!isTurning && (Sensor(RIGHT_SENSOR) < LIGHT_LIMIT));  // left sensor is over line
+  //Acquire(moveMutex);
+  Float(RIGHT_MOTOR);                               // turn left
+  //Release(moveMutex);
+  until(Sensor(RIGHT_SENSOR) > LIGHT_LIMIT);
+  Wait(5); // ???
+  //Acquire(moveMutex);
+  OnFwd(RIGHT_MOTOR, FORWARD_SPEED_RIGHT);
+  //Release(moveMutex);
+ }
+}
+
+task move()
+{
+
+ //int moveList[200] = {1, 1, 1, 1, 1, 1, 1};         // list of moves: [forward, left, right, back]
+ //int index = 0;
+ while(true)
+ {
+  until(Sensor(CROSS_SENSOR) < CROSS_LIMIT);                  // robot at intersection
+  PlayToneEx(350,500,8, FALSE);
+  isTurning = true;
+
+   //switch(moveList[index])
+   switch(2)
+   {
+    case(1):
+    {
+     // go forward
+    break;
+    }
+    case(2):
+    {
+     Wait(200);
+     Float(BOTH_MOTOR);
+     Wait(1000);
+     OnFwd(RIGHT_MOTOR, FORWARD_SPEED_RIGHT);
+     until(Sensor(LEFT_SENSOR) < LIGHT_LIMIT);  // left sensor is over line
+     Wait(250);
+     OnFwd(LEFT_MOTOR, FORWARD_SPEED_LEFT);
+     Float(RIGHT_MOTOR)    ;
+                                // turn left
+     break;
+    }
+    case(3):
+    {
+     // turn right
+     break;
+    }
+    case(4):
+    {
+     // turn around
+     break;
+    }
+
+    default:
+     // ?
+  }
+  //++index;
+  isTurning = false;
+
+ }
+}
+
+task main()
+{
+ SetSensorLight(LEFT_SENSOR);
+ SetSensorLight(RIGHT_SENSOR);
+ SetSensorLight(CROSS_SENSOR);
+ OnFwd(LEFT_MOTOR, FORWARD_SPEED_LEFT);
+ OnFwd(RIGHT_MOTOR, FORWARD_SPEED_RIGHT);
+
+ /* while(true){
+    printf("light level L%d", Sensor(LEFT_SENSOR));
+ }     */
+
+ Precedes(senseLeft, senseRight,move);
+
+}
+
