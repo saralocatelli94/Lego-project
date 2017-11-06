@@ -2,6 +2,16 @@
 #define RIGHT_MOTOR OUT_C
 #define BOTH_MOTOR OUT_AC
 
+// Hey, this is Adrian
+// I will add a few comments here, and also in the move() task
+// Instead of moving all sensors over the intersection after detecting with the CROSS sensor
+// we could stop immediately and find out the constants for turning onto the other line
+// the senseLeft() and senseRight() tasks assume that all motors are already running
+// so the move task should turn them back on at the end
+
+// It is maybe possible that tasks will try to control the motors simultenously
+// this could be investigated
+
 #define FORWARD_SPEED_RIGHT 58
 #define FORWARD_SPEED_LEFT 60
 #define REVERSE_SPEED -60
@@ -53,6 +63,8 @@ task senseRight()
 task move()
 {
 
+ // TODO: this is not the proper way to allocate an array in NXC because it gives an error
+ // I think there is a solution in the NXC guide somewhere 
  //int moveList[200] = {1, 1, 1, 1, 1, 1, 1};         // list of moves: [forward, left, right, back]
  //int index = 0;
  while(true)
@@ -71,15 +83,18 @@ task move()
     }
     case(2):
     {
-     Wait(200);
+     Wait(200);  // I think this wait should be taken out, and the sensor moved over the black lines 
+     // by adjusting the Waits to ignore detections until the next line to follow comes
+     // we could also try counting the CROSS sensor detections, and stop when over the next line
      Float(BOTH_MOTOR);
      Wait(1000);
      OnFwd(RIGHT_MOTOR, FORWARD_SPEED_RIGHT);
      until(Sensor(LEFT_SENSOR) < LIGHT_LIMIT);  // left sensor is over line
      Wait(250);
+     // the senseLeft() and senseRight() tasks assume that all motors are already running
+     // so the move task should turn them back on at the end
      OnFwd(LEFT_MOTOR, FORWARD_SPEED_LEFT);
-     Float(RIGHT_MOTOR)    ;
-                                // turn left
+     OnFwd(RIGHT_MOTOR, FORWARD_SPEED_RIGHT);
      break;
     }
     case(3):
