@@ -5,7 +5,8 @@
 // Hey, this is Adrian
 // I will add a few comments here, and also in the move() task
 // Instead of moving all sensors over the intersection after detecting with the CROSS sensor
-// we could stop immediately and find out the constants for turning onto the other line
+// we could stop and turn immediately and use the RIGHT sensor to detect the next line to follow
+// OR we could turn in place, instead of turning like how we did before
 // the senseLeft() and senseRight() tasks assume that all motors are already running
 // so the move task should turn them back on at the end
 
@@ -83,12 +84,14 @@ task move()
     }
     case(2):
     {
-     Wait(200);  // I think this wait should be taken out, and the sensor moved over the black lines 
+     Wait(200);  // This wait could be taken out, and the RIGHT sensor moved over the black lines 
      // by adjusting the Waits to ignore detections until the next line to follow comes
-     // we could also try counting the CROSS sensor detections, and stop when over the next line
+     // we could also try counting the sensor detections, and stop when over the next line
      Float(BOTH_MOTOR);
      Wait(1000);
      OnFwd(RIGHT_MOTOR, FORWARD_SPEED_RIGHT);
+     // it is also possible to turn in place with the OnRev function I think
+     // OnRev(LEFT_MOTOR, ???);
      until(Sensor(LEFT_SENSOR) < LIGHT_LIMIT);  // left sensor is over line
      Wait(250);
      // the senseLeft() and senseRight() tasks assume that all motors are already running
