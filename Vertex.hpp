@@ -62,12 +62,12 @@ public:
     Edge(Vertex & target, unsigned int weight);
     Edge(Vertex & target, unsigned int weight, char direction);
     
-    Vertex *getTarget();
+    Vertex * getTarget();
     int getWeight();
     char getDirection();
     
 protected:
-    Vertex *target;
+    Vertex * target;
     int weight;
     char direction;
 };

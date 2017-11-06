@@ -23,7 +23,8 @@ public:
     Solver();
     ~Solver();
     
-    Solver(Graph mStart, Graph mGoal);
+    Solver(Graph & mStart, Graph & mGoal);
+    Solver(Graph & mStart, Graph & mGoal, int width, int height);
     
     void startSolver();
     
@@ -32,7 +33,7 @@ public:
     unsigned long getNumOfNodes();
     
 protected:
-    Graph mapStart, mapGoal, mapCurrent;
+    Graph * mapStart, * mapGoal, * mapCurrent;
     std::vector<SolverNode> solutionList_Open;      // All nodes
     std::vector<SolverNode> solutionList_Closed;    // Nodes to solution
     
@@ -60,6 +61,9 @@ private:
     
     unsigned long numOfNodes;
     unsigned long currentNode;
+    
+    int map_width;
+    int map_height;
 };
 
 #endif /* Solver_hpp */

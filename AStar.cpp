@@ -19,8 +19,8 @@ map(roadMap), vStart(vertexStart), vGoal(vertexGoal), directionGoal(dirGoal){
 
 bool AStar::runAStar(){
     if (!validStartAndGoal()) {
-        std::cerr << "Goal and/or start not valid.\n";
-        return false;
+        //std::cerr << "Goal and/or start not valid.\n";
+        //return false;
     }
     
     currentVertexIndex = vStart.getIndex();
@@ -37,12 +37,6 @@ bool AStar::runAStar(){
     {
         // Go through all connections from current vertex:
         for (int i = 0 ; i < map.getVertex(currentVertexIndex).connections.size() ; i++){
-            
-            /*
-             TODO:
-             Impliment check for each vertex:
-             - Check if the connected vertex contains a dimond. If so, you can't move there.
-             */
             
             // Check if the new vertex is allready in vertexOpenList
             bool prevAddedToOpenList = false;
@@ -173,16 +167,14 @@ void AStar::printVertexToGoal(){
 
 bool AStar::validStartAndGoal(){
     if (!vStart.getSokoban()) {
-        std::cerr << "ERROR: Sokoban not on start-Vertex.\n";
-        return false;
+        //std::cerr << "ERROR: Sokoban not on start-Vertex.\n";
+        //return false;
     }
     else if (vStart.getIndex() == vGoal.getIndex()) {
-        std::cerr << "ERROR: Start- and Goal-Vertex are the same\n";
-        return false;
+        //std::cerr << "ERROR: Start- and Goal-Vertex are the same\n";
+        //return false;
     }
-    else {
-        return true;
-    }
+    return true;
 }
 
 double AStar::heuristicDistance(Vertex current, Vertex goal){

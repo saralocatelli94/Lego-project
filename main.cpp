@@ -167,9 +167,12 @@ int main() {
     }
     
     cout << "Road map string: " << road_map.getGraphRepresentation() << endl;
-    //cout << "Goal map string: " << goal_map.getGraphRepresentation() << endl;
+    cout << "Goal map string: " << goal_map.getGraphRepresentation() << endl;
     
-    Solver solution(road_map, goal_map);
+    PathDrawer startMap(map_width, map_height, road_map);
+    startMap.drawMapAndSave("Images/startMap.ppm");
+    
+    Solver solution(road_map, goal_map, map_width, map_height);
     solution.startSolver();
     std::vector<SolverNode> solutionList = solution.getSolution();
     

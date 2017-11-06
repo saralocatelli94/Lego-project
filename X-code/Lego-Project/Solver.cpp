@@ -14,10 +14,16 @@ Solver::Solver(){
 Solver::~Solver(){
 }
 
-Solver::Solver(Graph mS, Graph mG):
-mapStart(mS), mapGoal(mG), mapCurrent(mS){
+Solver::Solver(Graph & mS, Graph & mG):
+mapStart(&mS), mapGoal(&mG), mapCurrent(&mS){
     constructorSetup();
 }
+
+Solver::Solver(Graph & mS, Graph & mG, int width, int height):
+mapStart(&mS), mapGoal(&mG), mapCurrent(&mS), map_width(width), map_height(height){
+    constructorSetup();
+}
+
 
 void Solver::startSolver(){
     
@@ -33,13 +39,8 @@ void Solver::startSolver(){
      7) When solutions is found (end of while-loop) backtrack the openlist, to find the solution.
      */
     
-    /* A list of all diamonds's index in the graph:
-    std::vector<int> diamonds;
-    for (int i = 0 ; i < mapCurrent.getNumOfVertex() ; i++) {
-        if (mapCurrent.getVertex(i).getDiamond()) {
-            diamonds.push_back(mapCurrent.getVertex(i).getIndex());
-        }
-    }*/
+    // A list of all diamonds's index in the graph:
+    std::vector<int> vertex_diamonds;
     // A list of all vertex's in the graph that does NOT have i diamond, and has an edge to a vertex containing a diamond.
     std::vector<std::vector<int>> vertex_NextToDiamonds;
     // A list of the dimonds that ro robot can actually move:
@@ -52,24 +53,35 @@ void Solver::startSolver(){
     // Start the solver:
     while (!compairCurrentConfigToGoalConfig()) {
         
+        vertex_diamonds.clear();
         vertex_NextToDiamonds.clear();
         vertex_Movable.clear();
         vertex_MovableAndReachable.clear();
         
         std::cout << "Num of nodes:    " << numOfNodes << std::endl;
-        std::cout << "Current config0: " << currentConfiguration << std::endl;
-        /*
-        for (int i = 0 ; i < diamonds.size() ; i++) {
-            for (int j = 0 ; j < mapCurrent.getVertex(diamonds[i]).connections.size() ; j++) {
-                if (!mapCurrent.getVertex(diamonds[i]).connections[j].getTarget()->getDiamond()) {
+        //std::cout << "Current config0: " << currentConfiguration << std::endl;
+        
+        // Update the index's of the diamonds position:
+        for (int i = 0 ; i < mapCurrent->getNumOfVertex() ; i++) {
+            if (mapCurrent->getVertex(i).getDiamond()) {
+                vertex_diamonds.push_back(mapCurrent->getVertex(i).getIndex());
+            }
+        }
+        
+        // Find the connections from the diamonds position, that does not contain a diamond:
+        for (int i = 0 ; i < vertex_diamonds.size() ; i++) {
+            for (int j = 0 ; j < mapCurrent->getVertex(vertex_diamonds[i]).connections.size() ; j++) {
+                if (!mapCurrent->getVertex(vertex_diamonds[i]).connections[j].getTarget()->getDiamond()) {
                     std::vector<int> temp;
-                    temp.push_back(j);  // Free space
-                    temp.push_back(i);  // Diamond
+                    temp.push_back(mapCurrent->getVertex(vertex_diamonds[i]).connections[j].getTarget()->getIndex());  // Free space
+                    temp.push_back(vertex_diamonds[i]);  // Diamond
                     vertex_NextToDiamonds.push_back(temp);
+                    
                 }
             }
         }
-        */
+        
+        /*
         // Find vertex's with no diamonds, and that has vertex's with diamonds as a neighbour.
         for (int i = 0 ; i < mapCurrent.getNumOfVertex() ; i++) {
             for (int j = 0 ; j < mapCurrent.getVertex(i).connections.size() ; j++) {
@@ -82,6 +94,7 @@ void Solver::startSolver(){
                 }
             }
         }
+         */
         /*
         for (int i = 0 ; i < vertex_NextToDiamonds.size() ; i++) {
             std::cout << "Freespace: " << vertex_NextToDiamonds[i][0] << std::endl;
@@ -97,28 +110,27 @@ void Solver::startSolver(){
             std::string nextVertexName;
             
             if (direction == 'w') {
-                nextVertexName = std::to_string(mapCurrent.getVertex(robotIndex).getYPosition()) +
-                std::to_string(mapCurrent.getVertex(diamondIndex).getXPosition() - 1);
+                nextVertexName = std::to_string(mapCurrent->getVertex(robotIndex).getYPosition()) +
+                std::to_string(mapCurrent->getVertex(diamondIndex).getXPosition() - 1);
             }
             else if (direction == 'e') {
-                nextVertexName = std::to_string(mapCurrent.getVertex(robotIndex).getYPosition()) +
-                std::to_string(mapCurrent.getVertex(diamondIndex).getXPosition() + 1);
+                nextVertexName = std::to_string(mapCurrent->getVertex(robotIndex).getYPosition()) +
+                std::to_string(mapCurrent->getVertex(diamondIndex).getXPosition() + 1);
 
             }
             else if (direction == 'n') {
-                nextVertexName = std::to_string(mapCurrent.getVertex(diamondIndex).getYPosition() - 1) +
-                std::to_string(mapCurrent.getVertex(robotIndex).getXPosition());
+                nextVertexName = std::to_string(mapCurrent->getVertex(diamondIndex).getYPosition() - 1) +
+                std::to_string(mapCurrent->getVertex(robotIndex).getXPosition());
 
             }
             else if (direction == 's') {
-                nextVertexName = std::to_string(mapCurrent.getVertex(diamondIndex).getYPosition() + 1) +
-                std::to_string(mapCurrent.getVertex(robotIndex).getXPosition());
+                nextVertexName = std::to_string(mapCurrent->getVertex(diamondIndex).getYPosition() + 1) +
+                std::to_string(mapCurrent->getVertex(robotIndex).getXPosition());
             }
             
             // If vertex exist in graph and does not contain a diamond, the movement of the diamond is valid:
-            if (mapCurrent.vertexExist(nextVertexName)) {
-                if (!mapCurrent.getVertex(nextVertexName).getDiamond() &&
-                    !mapCurrent.getVertex(nextVertexName).getSokoban()) {
+            if (mapCurrent->vertexExist(nextVertexName)) {
+                if (!mapCurrent->getVertex(nextVertexName).getDiamond()) {
                     vertex_Movable.push_back(vertex_NextToDiamonds[i]);
                 }
             }
@@ -126,8 +138,8 @@ void Solver::startSolver(){
         
         // Find the position of the sokoban:
         int sokobanIndexPosition = -1;
-        for (int i = 0 ; i < mapCurrent.getNumOfVertex() ; i++) {
-            if (mapCurrent.getVertex(i).getSokoban()){
+        for (int i = 0 ; i < mapCurrent->getNumOfVertex() ; i++) {
+            if (mapCurrent->getVertex(i).getSokoban()){
                 sokobanIndexPosition = i;
             }
         }
@@ -139,13 +151,13 @@ void Solver::startSolver(){
             int diamondIndex = vertex_Movable[i][1];
             char direction = findDirection(robotIndex, diamondIndex);
             // If start- and end-vertex are the same:
-            if (mapCurrent.getVertex(sokobanIndexPosition).getIndex() == mapCurrent.getVertex(vertex_Movable[i][0]).getIndex()) {
+            if (mapCurrent->getVertex(sokobanIndexPosition).getIndex() == mapCurrent->getVertex(vertex_Movable[i][0]).getIndex()) {
                 vertex_MovableAndReachable.push_back(vertex_Movable[i]);
             }
             else {
-                AStar temp(mapCurrent,
-                           mapCurrent.getVertex(sokobanIndexPosition),
-                           mapCurrent.getVertex(vertex_Movable[i][0]),
+                AStar temp(*mapCurrent,
+                           mapCurrent->getVertex(sokobanIndexPosition),
+                           mapCurrent->getVertex(vertex_Movable[i][0]),
                            direction);
                 if (temp.runAStar()) {
                     vertex_MovableAndReachable.push_back(vertex_Movable[i]);
@@ -159,25 +171,28 @@ void Solver::startSolver(){
         }
         */
         // Save the current map configs:
-        std::string configBeforeMoving = mapCurrent.getGraphRepresentation();
+        std::string configBeforeMoving = mapCurrent->getGraphRepresentation();
         std::string configAfterMoving;
         
         // Move the diamond one space in the direction:
         for (int i = 0 ; i < vertex_MovableAndReachable.size() ; i++) {
+            // Because we change the map on each itteration, reset the map to the current node in openlist
+            mapCurrent->setAllVertexInfo(configBeforeMoving);
+            
             // Get the direction of movement:
             int robotIndex = vertex_MovableAndReachable[i][0];
             int diamondIndex = vertex_MovableAndReachable[i][1];
             char direction = findDirection(robotIndex, diamondIndex);
             
             // Move the robot to new position, and erase the diamond from same position:
-            mapCurrent.getVertex(sokobanIndexPosition).setSokoban(false);
-            mapCurrent.getVertex(vertex_MovableAndReachable[i][1]).setSokoban(true);
-            mapCurrent.getVertex(vertex_MovableAndReachable[i][1]).setDiamond(false);
+            mapCurrent->getVertex(sokobanIndexPosition).setSokoban(false);
+            mapCurrent->getVertex(vertex_MovableAndReachable[i][1]).setSokoban(true);
+            mapCurrent->getVertex(vertex_MovableAndReachable[i][1]).setDiamond(false);
             
             // Find name of new vertex:
             std::string newVertexName;
-            int xPos = mapCurrent.getVertex(vertex_MovableAndReachable[i][1]).getXPosition();
-            int yPos = mapCurrent.getVertex(vertex_MovableAndReachable[i][1]).getYPosition();
+            int xPos = mapCurrent->getVertex(vertex_MovableAndReachable[i][1]).getXPosition();
+            int yPos = mapCurrent->getVertex(vertex_MovableAndReachable[i][1]).getYPosition();
             if (direction == 'w') {
                 newVertexName = std::to_string(yPos) + std::to_string(xPos - 1);
             }
@@ -192,10 +207,10 @@ void Solver::startSolver(){
             }
             
             // Config the new vertex:
-            mapCurrent.getVertex(newVertexName).setDiamond(true);
+            mapCurrent->getVertex(newVertexName).setDiamond(true);
             
             // Save the new map configuration:
-            configAfterMoving = mapCurrent.getGraphRepresentation();
+            configAfterMoving = mapCurrent->getGraphRepresentation();
             
             // See if the new config is allready in the openlist:
             if (!configurationAllreadyChecked(configAfterMoving)) {
@@ -204,7 +219,7 @@ void Solver::startSolver(){
                 numOfNodes++;
             }
             else {
-                std::cout << "Already been checked\n";
+                //std::cout << "Already been checked\n";
             }
             
             // check to see if we have found the goal config:
@@ -218,43 +233,55 @@ void Solver::startSolver(){
         if (!compairConfigs(currentConfiguration, goalConfiguration)) {
             // take the next config from openlist:
             currentConfiguration = solutionList_Open.at(currentNode).graphString_AfterDiamondMove;
-            std::cout << "Current config1: " << currentConfiguration << std::endl;
+            //std::cout << "Current config1: " << currentConfiguration << std::endl;
         }
-        // TODO:: Jeg ændre ikke index. Husk map config ordenligt.
-        mapCurrent.setAllVertexInfo(currentConfiguration);
+        else {
+            std::cout << "We hit the goal.\n";
+        }
+        //
+        mapCurrent->setAllVertexInfo(currentConfiguration);
+        
+        // Debug:
+        /*
+        Graph temp = *mapCurrent;
+        temp.setAllVertexInfo(solutionList_Open[currentNode].graphString_AfterDiamondMove);
+        AStar aStarTest(temp, temp.getVertex(solutionList_Open[currentNode].position_BeforeDiamondMove), temp.getVertex(solutionList_Open[currentNode].position_AfterDiamondMove), 'n');
+        
+        PathDrawer a(mapWidth, mapHeight, temp);
+        a.drawMapAndSave("Images/Map_PrevID" + std::to_string(solutionList_Open[currentNode].prevID) + "_ID" + std::to_string(solutionList_Open[currentNode].ID) + ".ppm");
+        */
+        
         ID_current++;
         currentNode++;
-        /*
-        for (int i = 0 ; i < solutionList_Open.size() ; i++) {
-            std::string name = "node" + std::to_string(i) + ".ppm";
-            Graph temp = mapCurrent;
-            temp.setAllVertexInfo(solutionList_Open[i].graphString_BeforeDiamondMove);
-            AStar aStarTest(temp, temp.getVertex(solutionList_Open[i].position_BeforeDiamondMove), temp.getVertex(solutionList_Open[i].position_AfterDiamondMove), 'n');
-            
-            std::vector<VertexList> path = aStarTest.getPath();
-            
-            PathDrawer Test(10, 9, temp, path);
-            Test.drawPathAndSave(name);
-            
-            
-        }
-        */
+        
     }
     
     // Backtrack to find the solution:
     std::vector<SolverNode> temp;
-    temp.push_back(solutionList_Closed.at(solutionList_Closed.size()-1));
-    solutionList_Closed.pop_back();
-    for (int i = (int)solutionList_Closed.size()-1 ; i >= 0 ; i--) {
-        if (temp.back().prevID == solutionList_Closed[i].ID) {
-            temp.push_back(solutionList_Closed[i]);
+    temp.push_back(solutionList_Open.at(solutionList_Open.size()-1));
+    solutionList_Open.pop_back();
+    for (int i = (int)solutionList_Open.size()-1 ; i >= 0 ; i--) {
+        if (temp.back().prevID == solutionList_Open[i].ID) {
+            temp.push_back(solutionList_Open[i]);
         }
     }
     
+    // Flip the vector:
     for (int i = (int)temp.size()-1 ; i >= 0 ; i--) {
-        solutionList_Open.push_back(temp[i]);
+        solutionList_Closed.push_back(temp[i]);
     }
     
+    // Print the solution as images:
+    
+    for (int i = 0 ; i < solutionList_Closed.size() ; i++) {
+        Graph temp = *mapCurrent;
+        temp.setAllVertexInfo(solutionList_Closed[i].graphString_AfterDiamondMove);
+        AStar aStarTest(temp, temp.getVertex(solutionList_Closed[i].position_BeforeDiamondMove), temp.getVertex(solutionList_Closed[i].position_AfterDiamondMove), 'n');
+        
+        PathDrawer a(map_width, map_height, temp);
+        a.drawMapAndSave("Images/solution_step" + std::to_string(i) + "_ID" + std::to_string(solutionList_Closed[i].ID) + ".ppm");
+
+    }
 }
 
 std::vector<SolverNode> Solver::getSolution(){
@@ -306,8 +333,8 @@ bool Solver::compairConfigs(std::string current, std::string next){
 char Solver::findDirection(int robotIndex, int diamondIndex){
     char direction = 'o';
     
-    int xCoorDiff = mapCurrent.getVertex(robotIndex).getXPosition() - mapCurrent.getVertex(diamondIndex).getXPosition();
-    int yCoorDiff = mapCurrent.getVertex(robotIndex).getYPosition() - mapCurrent.getVertex(diamondIndex).getYPosition();
+    int xCoorDiff = mapCurrent->getVertex(robotIndex).getXPosition() - mapCurrent->getVertex(diamondIndex).getXPosition();
+    int yCoorDiff = mapCurrent->getVertex(robotIndex).getYPosition() - mapCurrent->getVertex(diamondIndex).getYPosition();
     
     // find direction:
     if (abs(xCoorDiff) > abs(yCoorDiff)) {
@@ -337,9 +364,9 @@ char Solver::findDirection(int robotIndex, int diamondIndex){
 }
 
 void Solver::constructorSetup(){
-    startConfiguration = mapStart.getGraphRepresentation();
-    currentConfiguration = mapCurrent.getGraphRepresentation();
-    goalConfiguration = mapGoal.getGraphRepresentation();
+    startConfiguration = mapStart->getGraphRepresentation();
+    currentConfiguration = mapCurrent->getGraphRepresentation();
+    goalConfiguration = mapGoal->getGraphRepresentation();
     numOfNodes = 0;
     currentNode = 0;
 }

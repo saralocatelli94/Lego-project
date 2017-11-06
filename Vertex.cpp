@@ -105,8 +105,8 @@ Edge::~Edge(){
     
 }
 
-Edge::Edge(Vertex & tar):
-target(&tar){
+Edge::Edge(Vertex & tar){
+    target = &tar;
     weight = 1;
 }
 
@@ -125,7 +125,7 @@ target(&tar), weight(w){
     }
 }
 
-Vertex *Edge::getTarget(){
+Vertex * Edge::getTarget(){
     return target;
 }
 

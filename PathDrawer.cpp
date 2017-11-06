@@ -207,7 +207,7 @@ void PathDrawer::drawArrowsOnAllVertex(){
                 img->setPixel8S(j, y-1, BLACK, BLACK, BLACK);
             }
         }
-        else { std::cerr << "Error: Vertex has no direction." << std::endl; }
+        //else { std::cerr << "Error: Vertex has no direction." << std::endl; }
         
         // Next, Draw two 45 degree lines:
         int lenghtOfArrowHead = lenghtOfArrow/5;
