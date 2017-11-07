@@ -170,14 +170,17 @@ int main() {
     cout << "Goal map string: " << goal_map.getGraphRepresentation() << endl;
     
     PathDrawer startMap(map_width, map_height, road_map);
-    startMap.drawMapAndSave("Images/startMap.ppm");
+    startMap.drawMapAndSave("Images/map_start.ppm");
     
     Solver solution(road_map, goal_map, map_width, map_height);
     solution.startSolver();
     std::vector<SolverNode> solutionList = solution.getSolution();
     
     for (int i = 0 ; i < solutionList.size() ; i++) {
-        cout << solutionList[i].ID << endl;
+        cout << "ID: " << solutionList[i].ID
+        << " PrevID: " << solutionList[i].prevID 
+        << " Depth: " << solutionList[i].depthInTree
+        << " Distance: " << solutionList[i].distanceTraveled << endl;
     }
     
     /*

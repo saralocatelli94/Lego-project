@@ -48,3 +48,18 @@ graphString_BeforeDiamondMove(beforeMove), graphString_AfterDiamondMove(afterMov
     }
 }
 
+SolverNode::SolverNode(std::string beforeMove, std::string afterMove, long id, long p_id, long dist, int depth):
+graphString_BeforeDiamondMove(beforeMove), graphString_AfterDiamondMove(afterMove), ID(id), prevID(p_id), distanceTraveled(dist), depthInTree(depth){
+    for (int i = 0 ; i < beforeMove.length() ; i++) {
+        if (beforeMove.at(i) == 'M' || beforeMove.at(i) == 'N') {
+            position_BeforeDiamondMove = i;
+            break;
+        }
+    }
+    for (int i = 0 ; i < afterMove.length() ; i++) {
+        if (afterMove.at(i) == 'M' || afterMove.at(i) == 'M') {
+            position_AfterDiamondMove = i;
+            break;
+        }
+    }
+}

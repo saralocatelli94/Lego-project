@@ -20,7 +20,10 @@ struct SolverNode{
     SolverNode(std::string beforeMove, std::string afterMove);
     SolverNode(std::string beforeMove, std::string afterMove,
                long id, long p_id);
+    SolverNode(std::string beforeMove, std::string afterMove,
+               long id, long p_id, long dist, int depth);
     
+    // Robot position:
     int position_BeforeDiamondMove;
     int position_AfterDiamondMove;
     
@@ -29,6 +32,12 @@ struct SolverNode{
     
     long ID;
     long prevID;
+    
+    // Distance the robot has traveled to this move:
+    long distanceTraveled;
+    
+    // Depth in the tree:
+    int depthInTree;
     
 };
 

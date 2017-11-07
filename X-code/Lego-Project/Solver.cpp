@@ -49,6 +49,7 @@ void Solver::startSolver(){
     std::vector<std::vector<int>> vertex_MovableAndReachable;
     
     int ID_current = -1;
+    int itterator = 0;
     
     // Start the solver:
     while (!compairCurrentConfigToGoalConfig()) {
@@ -58,7 +59,12 @@ void Solver::startSolver(){
         vertex_Movable.clear();
         vertex_MovableAndReachable.clear();
         
-        std::cout << "Num of nodes:    " << numOfNodes << std::endl;
+        if (itterator > 200) {
+            std::cout << "Num of nodes:    " << numOfNodes << std::endl;
+            itterator = 0;
+        }
+        itterator++;
+        
         //std::cout << "Current config0: " << currentConfiguration << std::endl;
         
         // Update the index's of the diamonds position:
@@ -152,7 +158,11 @@ void Solver::startSolver(){
             char direction = findDirection(robotIndex, diamondIndex);
             // If start- and end-vertex are the same:
             if (mapCurrent->getVertex(sokobanIndexPosition).getIndex() == mapCurrent->getVertex(vertex_Movable[i][0]).getIndex()) {
-                vertex_MovableAndReachable.push_back(vertex_Movable[i]);
+                std::vector<int> temp2;
+                temp2.push_back(vertex_Movable[i][0]);          // Free space
+                temp2.push_back(vertex_Movable[i][1]);          // Diamond
+                temp2.push_back(0);                             // Length of robot-path
+                vertex_MovableAndReachable.push_back(temp2);
             }
             else {
                 AStar temp(*mapCurrent,
@@ -160,7 +170,12 @@ void Solver::startSolver(){
                            mapCurrent->getVertex(vertex_Movable[i][0]),
                            direction);
                 if (temp.runAStar()) {
-                    vertex_MovableAndReachable.push_back(vertex_Movable[i]);
+                    std::vector<int> temp2;
+                    temp2.push_back(vertex_Movable[i][0]);          // Free space
+                    temp2.push_back(vertex_Movable[i][1]);          // Diamond
+                    temp2.push_back((int)temp.getPath().size());    // Length of robot-path
+                    
+                    vertex_MovableAndReachable.push_back(temp2);
                 }
             }
         }
@@ -212,10 +227,21 @@ void Solver::startSolver(){
             // Save the new map configuration:
             configAfterMoving = mapCurrent->getGraphRepresentation();
             
+            // Calculate the depth in the "tree" and the total distance of the robot traveled:
+            int depth;
+            long dist;
+            if (ID_current == -1) {
+                depth = 0;
+                dist = vertex_MovableAndReachable[i][2];
+            } else {
+                depth = solutionList_Open[ID_current].depthInTree + 1;
+                dist = solutionList_Open[ID_current].distanceTraveled + vertex_MovableAndReachable[i][2] + 1;
+            }
+            
             // See if the new config is allready in the openlist:
             if (!configurationAllreadyChecked(configAfterMoving)) {
                 // Put the new map in the openlist:
-                solutionList_Open.push_back(SolverNode(configBeforeMoving, configAfterMoving, numOfNodes, ID_current));
+                solutionList_Open.push_back(SolverNode(configBeforeMoving, configAfterMoving, numOfNodes, ID_current, dist, depth));
                 numOfNodes++;
             }
             else {
@@ -237,6 +263,7 @@ void Solver::startSolver(){
         }
         else {
             std::cout << "We hit the goal.\n";
+            std::cout << "Num of nodes:    " << numOfNodes << std::endl;
         }
         //
         mapCurrent->setAllVertexInfo(currentConfiguration);
