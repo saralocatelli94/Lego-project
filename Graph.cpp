@@ -19,6 +19,11 @@ Graph::~Graph(){
     
 }
 
+Graph::Graph(int noDiamonds):
+numOfDiamonds(noDiamonds){
+    numOfVertex = 0;
+}
+
 void Graph::addVertex(){
     adjList.push_back(Vertex(numOfVertex, std::to_string(numOfVertex)));
     numOfVertex++;
@@ -186,6 +191,15 @@ unsigned int Graph::getNumOfVertex(){
     return numOfVertex;
 }
 
+unsigned int Graph::getNumOfDiamonds(){
+    return numOfDiamonds;
+}
+
+unsigned int Graph::getRobotPosition(){
+    updateRobotPosition();
+    return RobotPosition;
+}
+
 void Graph::printGraph(){
     std::cout << "Printing the graph:\n\n";
     std::cout << std::setw(6) << "Index:";
@@ -257,6 +271,11 @@ bool Graph::operator==(Graph rhs){
 std::string Graph::getGraphRepresentation(){
     createGraphRepresentation();
     return graphRepresentation;
+}
+
+std::vector<int> Graph::getDiamondPosition(){
+    updateDiamondPosition();
+    return diamondPosition;
 }
 
 int** Graph::printAdjMatrix(){
@@ -524,6 +543,22 @@ void Graph::setAllVertexInfo(std::string graphRep){
     }
 }
 
+void Graph::setAllVertexInfo(std::vector<int> diamondPos, int robotPos){
+    // Reset all vertex's with diamonds and sokoban:
+    for (int i = 0 ; i < numOfVertex ; i++) {
+        if (adjList.at(i).getDiamond()) {
+            adjList.at(i).setDiamond(false);
+        }
+        else if (adjList.at(i).getSokoban()) {
+            adjList.at(i).setSokoban(false);
+        }
+    }
+    for (int i = 0 ; i < diamondPos.size() ; i++) {
+        adjList.at(diamondPos.at(i)).setDiamond(true);
+    }
+    adjList.at(robotPos).setSokoban(true);
+}
+
 void Graph::createGraphRepresentation(){
     /**
      Free space:        "."
@@ -562,3 +597,20 @@ void Graph::createGraphRepresentation(){
     }
 }
 
+void Graph::updateDiamondPosition(){
+    diamondPosition.clear();
+    for (int i = 0 ; i < numOfVertex ; i++) {
+        if (adjList.at(i).getDiamond()) {
+            diamondPosition.push_back(adjList.at(i).getIndex());
+        }
+    }
+}
+
+void Graph::updateRobotPosition(){
+    for (int i = 0 ; i < numOfVertex ; i++) {
+        if (adjList.at(i).getSokoban()) {
+            RobotPosition = i;
+            break;
+        }
+    }
+}

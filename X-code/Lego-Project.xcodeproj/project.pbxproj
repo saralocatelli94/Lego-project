@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5A3E0E5F1FB5D6D800C6BF3C /* Solver_v2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A3E0E5D1FB5D6D800C6BF3C /* Solver_v2.cpp */; };
+		5A3E0E621FB5D6EB00C6BF3C /* SolverNode_v2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A3E0E601FB5D6EB00C6BF3C /* SolverNode_v2.cpp */; };
 		5A57B14E1F90C9AB00CF8EE2 /* AStar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A57B13B1F90C9AB00CF8EE2 /* AStar.cpp */; };
 		5A57B14F1F90C9AB00CF8EE2 /* Graph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A57B13D1F90C9AB00CF8EE2 /* Graph.cpp */; };
 		5A57B1501F90C9AB00CF8EE2 /* Image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A57B13F1F90C9AB00CF8EE2 /* Image.cpp */; };
@@ -33,6 +35,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5A3E0E5D1FB5D6D800C6BF3C /* Solver_v2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Solver_v2.cpp; sourceTree = "<group>"; };
+		5A3E0E5E1FB5D6D800C6BF3C /* Solver_v2.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Solver_v2.hpp; sourceTree = "<group>"; };
+		5A3E0E601FB5D6EB00C6BF3C /* SolverNode_v2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SolverNode_v2.cpp; sourceTree = "<group>"; };
+		5A3E0E611FB5D6EB00C6BF3C /* SolverNode_v2.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SolverNode_v2.hpp; sourceTree = "<group>"; };
 		5A57B1311F90C97800CF8EE2 /* Lego-Project */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Lego-Project"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A57B13B1F90C9AB00CF8EE2 /* AStar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AStar.cpp; path = ../../AStar.cpp; sourceTree = "<group>"; };
 		5A57B13C1F90C9AB00CF8EE2 /* AStar.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AStar.hpp; path = ../../AStar.hpp; sourceTree = "<group>"; };
@@ -90,6 +96,10 @@
 			isa = PBXGroup;
 			children = (
 				5A57B1421F90C9AB00CF8EE2 /* main.cpp */,
+				5A3E0E5D1FB5D6D800C6BF3C /* Solver_v2.cpp */,
+				5A3E0E5E1FB5D6D800C6BF3C /* Solver_v2.hpp */,
+				5A3E0E601FB5D6EB00C6BF3C /* SolverNode_v2.cpp */,
+				5A3E0E611FB5D6EB00C6BF3C /* SolverNode_v2.hpp */,
 				5AF673541FA8E3AB008440A2 /* Solver.cpp */,
 				5AF673551FA8E3AB008440A2 /* Solver.hpp */,
 				5AF673571FAA57D5008440A2 /* SolverNode.cpp */,
@@ -173,9 +183,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A3E0E5F1FB5D6D800C6BF3C /* Solver_v2.cpp in Sources */,
 				5A57B1501F90C9AB00CF8EE2 /* Image.cpp in Sources */,
 				5A57B1551F90C9AB00CF8EE2 /* Vertex.cpp in Sources */,
 				5A57B1541F90C9AB00CF8EE2 /* PPMLoader.cpp in Sources */,
+				5A3E0E621FB5D6EB00C6BF3C /* SolverNode_v2.cpp in Sources */,
 				5A57B14F1F90C9AB00CF8EE2 /* Graph.cpp in Sources */,
 				5AF673561FA8E3AB008440A2 /* Solver.cpp in Sources */,
 				5A57B1511F90C9AB00CF8EE2 /* main.cpp in Sources */,

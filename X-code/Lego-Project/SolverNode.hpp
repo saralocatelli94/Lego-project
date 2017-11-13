@@ -30,11 +30,11 @@ struct SolverNode{
     std::string graphString_BeforeDiamondMove;
     std::string graphString_AfterDiamondMove;
     
-    long ID;
-    long prevID;
+    int ID;
+    int prevID;
     
     // Distance the robot has traveled to this move:
-    long distanceTraveled;
+    int distanceTraveled;
     
     // Depth in the tree:
     int depthInTree;

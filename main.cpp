@@ -17,6 +17,7 @@
 #include "Image.hpp"
 #include "PPMLoader.hpp"
 #include "Solver.hpp"
+#include "Solver_v2.hpp"
 
 using namespace rw::sensor;
 using namespace rw::loaders;
@@ -56,7 +57,7 @@ int main() {
     }
     map.close();
     
-    Graph road_map;
+    Graph start_map(numOfDimonds);
     int costOfDriving = 10;
     char defaultSokobanDirection = 's';
     
@@ -89,9 +90,9 @@ int main() {
                 
                 // Add vertex:
                 if (map_char[i][j] == 'M')
-                    road_map.addVertex(name, dimond, goal, sokoban, defaultSokobanDirection);
+                    start_map.addVertex(name, dimond, goal, sokoban, defaultSokobanDirection);
                 else
-                    road_map.addVertex(name, dimond, goal, sokoban);
+                    start_map.addVertex(name, dimond, goal, sokoban);
                 dimond = false, goal = false, sokoban = false;
             }
         }
@@ -117,7 +118,7 @@ int main() {
                     map_char[i-1][j] == 'M') {
                     
                     string nameTarget = to_string(i-1) + to_string(j);
-                    road_map.addEdge(nameCurrent, nameTarget, costOfDriving, 'n');
+                    start_map.addEdge(nameCurrent, nameTarget, costOfDriving, 'n');
                 }
                 
                 // Right (direction ~ East):
@@ -127,7 +128,7 @@ int main() {
                     map_char[i][j+1] == 'M') {
                     
                     string nameTarget = to_string(i) + to_string(j+1);
-                    road_map.addEdge(nameCurrent, nameTarget, costOfDriving, 'e');
+                    start_map.addEdge(nameCurrent, nameTarget, costOfDriving, 'e');
                 }
                 
                 // Below (direction ~ South):
@@ -137,7 +138,7 @@ int main() {
                     map_char[i+1][j] == 'M') {
                     
                     string nameTarget = to_string(i+1) + to_string(j);
-                    road_map.addEdge(nameCurrent, nameTarget, costOfDriving, 's');
+                    start_map.addEdge(nameCurrent, nameTarget, costOfDriving, 's');
                 }
                 
                 // Left (direction ~ West):
@@ -147,14 +148,14 @@ int main() {
                     map_char[i][j-1] == 'M') {
                     
                     string nameTarget = to_string(i) + to_string(j-1);
-                    road_map.addEdge(nameCurrent, nameTarget, costOfDriving, 'w');
+                    start_map.addEdge(nameCurrent, nameTarget, costOfDriving, 'w');
                 }
             }
         }
     }
     
-    road_map.printGraph();
-    Graph goal_map = road_map;
+    start_map.printGraph();
+    Graph goal_map = start_map;
     
     for (int i = 0 ; i < goal_map.getNumOfVertex() ; i++) {
         if (goal_map.getVertex(i).getGoal()){
@@ -166,22 +167,26 @@ int main() {
         }
     }
     
-    cout << "Road map string: " << road_map.getGraphRepresentation() << endl;
+    cout << "Road map string: " << start_map.getGraphRepresentation() << endl;
     cout << "Goal map string: " << goal_map.getGraphRepresentation() << endl;
     
-    PathDrawer startMap(map_width, map_height, road_map);
+    PathDrawer startMap(map_width, map_height, start_map);
     startMap.drawMapAndSave("Images/map_start.ppm");
     
-    Solver solution(road_map, goal_map, map_width, map_height);
+    Solver_v2 solution(start_map, goal_map, numOfDimonds, map_width, map_height);
     solution.startSolver();
-    std::vector<SolverNode> solutionList = solution.getSolution();
+    std::vector<std::vector<SolverNode_v2>> solutionList = solution.getSolution();
     
-    for (int i = 0 ; i < solutionList.size() ; i++) {
-        cout << "ID: " << solutionList[i].ID
-        << " PrevID: " << solutionList[i].prevID 
-        << " Depth: " << solutionList[i].depthInTree
-        << " Distance: " << solutionList[i].distanceTraveled << endl;
+    for (int j = 0 ; j < solutionList.size() ; j++) {
+        cout << "Solution " << j << "\n";
+        for (int i = 0 ; i < solutionList[j].size() ; i++) {
+            cout << "ID: " << solutionList[j][i].ID
+            << " PrevID: " << solutionList[j][i].prevID
+            << " Depth: " << solutionList[j][i].depthInTree
+            << " Distance: " << solutionList[j][i].distanceTraveled << endl;
+        }
     }
+    
     
     /*
     PathDrawer goalMap(map_width, map_height, goal_map);

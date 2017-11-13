@@ -21,6 +21,8 @@ public:
     Graph();
     ~Graph();
     
+    Graph(int noDiamonds);
+    
     void addVertex();
     void addVertex(std::string& name);
     void addVertex(std::string& name, bool& dimond, bool& goal, bool& sokoban);
@@ -43,6 +45,8 @@ public:
     Vertex &getVertex(std::string name);
 
     unsigned int getNumOfVertex();
+    unsigned int getNumOfDiamonds();
+    unsigned int getRobotPosition();
     
     // print graph
     void printGraph();
@@ -51,13 +55,18 @@ public:
     // Operator overload:
     bool operator==(Graph rhw);
     std::string getGraphRepresentation();
+    std::vector<int> getDiamondPosition();
     
     // Set information on all vertex's based on string input
     void setAllVertexInfo(std::string graphRepresentation);
+    void setAllVertexInfo(std::vector<int> diamondPos, int robotPos);
 
 protected:
     std::vector<Vertex> adjList;
     unsigned int numOfVertex;
+    unsigned int numOfDiamonds;
+    unsigned int RobotPosition;
+    std::vector<int> diamondPosition;
     
     // String representing the Graph. Makes it easier to compare graphs
     std::string graphRepresentation;
@@ -68,9 +77,9 @@ private:
 
     int minDistance(int dist[], bool sptSet[]);
     
-    
     void createGraphRepresentation();
-
+    void updateDiamondPosition();
+    void updateRobotPosition();
 };
 
 #endif /* Graph_hpp */

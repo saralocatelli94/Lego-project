@@ -28,14 +28,22 @@ public:
     
     void startSolver();
     
-    std::vector<SolverNode> getSolution();
+    std::vector<std::vector<SolverNode>> getSolution();
     
     unsigned long getNumOfNodes();
     
 protected:
     Graph * mapStart, * mapGoal, * mapCurrent;
     std::vector<SolverNode> solutionList_Open;      // All nodes
-    std::vector<SolverNode> solutionList_Closed;    // Nodes to solution
+    std::vector<std::vector<SolverNode>> solutionList_Closed;    // Nodes to solution
+    
+    unsigned long numOfNodes;
+    unsigned long currentNode;
+    
+    int map_width;
+    int map_height;
+    
+    int numOfSolutions;
     
 private:
     // string representation of 'mapStart' and 'mapGoal'
@@ -56,14 +64,14 @@ private:
     // Find the direction of movment:
     char findDirection(int robotIndex, int diamondIndex);
     
+    // Check for deadlock on mapCurrent:
+    bool deadlockCheck();
+    
+    // Check for deadlock on specific diamond in mapCurrent
+    bool deadlockCheck(std::string vertexName);
+    
     // configurations when calling a constructor.
     void constructorSetup();
-    
-    unsigned long numOfNodes;
-    unsigned long currentNode;
-    
-    int map_width;
-    int map_height;
 };
 
 #endif /* Solver_hpp */
