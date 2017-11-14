@@ -201,7 +201,7 @@ void Solver_v2::startSolver(){
             }
             
             // Deadlock check:
-            deadlock = deadlockCheck(vertex_MovableAndReachable[i][1]);
+            deadlock = deadlockCheck(vertex_MovableAndReachable[i][2]);
             
             // See if the new config is allready in the openlist, and there is no deadlock. If not, add it.
             if (!lookUpHash_prevAdded( hash(creatHashKey(diamondPosTemp)), diamondPosTemp) && !deadlock) {
@@ -293,6 +293,9 @@ char Solver_v2::findDirection(int robotIndex, int diamondIndex){
 }
 
 bool Solver_v2::deadlockCheck(int vertex){
+    if (mapCurrent->getVertex(vertex).getGoal()) {
+        return false;
+    }
     // Simpel test, to see if a diamond is in a corner, and cant get retrackted
     int size = (int) mapCurrent->getVertex(vertex).connections.size();
     if (size < 3 && mapCurrent->getVertex(vertex).getDiamond()) {
