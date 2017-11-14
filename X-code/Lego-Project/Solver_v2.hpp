@@ -46,12 +46,23 @@ private:
     int currentRobotPosition;
     int numOfDiamonds;
     std::vector<int> diamondPositionCurrent;
+    std::vector<int> diamondPositionGoal;
     
     // Find the direction of movment:
     char findDirection(int robotIndex, int diamondIndex);
     
     // Deadlock check:
     bool deadlockCheck(int vertex);
+    
+    // Calculate heutistic distance to goal:
+    int calculateHeuristicDist(std::vector<int> diamondPos);
+    
+    // Straight line distance between vertex's
+    double pythagoras(int a, int b);
+    
+    // Does a vector contain a number?
+    bool contain(std::vector<int> vec, int num);
+    
     
     // For Hash-tabel use:
     int static const tableSize = 1009;      // Prime number

@@ -48,7 +48,6 @@
 		5A57B1401F90C9AB00CF8EE2 /* Image.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Image.hpp; path = ../../Image.hpp; sourceTree = "<group>"; };
 		5A57B1411F90C9AB00CF8EE2 /* macros.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = macros.hpp; path = ../../macros.hpp; sourceTree = "<group>"; };
 		5A57B1421F90C9AB00CF8EE2 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../../main.cpp; sourceTree = "<group>"; };
-		5A57B1431F90C9AB00CF8EE2 /* map_specs.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = map_specs.txt; path = ../../map_specs.txt; sourceTree = "<group>"; };
 		5A57B1441F90C9AB00CF8EE2 /* Node.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Node.cpp; path = ../../Node.cpp; sourceTree = "<group>"; };
 		5A57B1451F90C9AB00CF8EE2 /* Node.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Node.h; path = ../../Node.h; sourceTree = "<group>"; };
 		5A57B1461F90C9AB00CF8EE2 /* PathDrawer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PathDrawer.cpp; path = ../../PathDrawer.cpp; sourceTree = "<group>"; };
@@ -111,7 +110,6 @@
 				5A57B13F1F90C9AB00CF8EE2 /* Image.cpp */,
 				5A57B1401F90C9AB00CF8EE2 /* Image.hpp */,
 				5A57B1411F90C9AB00CF8EE2 /* macros.hpp */,
-				5A57B1431F90C9AB00CF8EE2 /* map_specs.txt */,
 				5A57B1441F90C9AB00CF8EE2 /* Node.cpp */,
 				5A57B1451F90C9AB00CF8EE2 /* Node.h */,
 				5A57B1461F90C9AB00CF8EE2 /* PathDrawer.cpp */,

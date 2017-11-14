@@ -27,6 +27,7 @@ mapStart(&mS), mapGoal(&mG), mapCurrent(&mS), numOfDiamonds(numOfDia), map_width
         int x = rand() % 1000 + 1;
         lookUp_diamondValue.push_back(x);
     }
+    diamondPositionGoal = mapGoal->getDiamondPosition();
 }
 
 /********************** Solver functions ************************/
@@ -63,8 +64,9 @@ void Solver_v2::startSolver(){
     int distCurrent = 0;
     bool deadlock;
     
-    
-    solutionList_Open.push_back(SolverNode_v2(mapStart->getRobotPosition(), mapStart->getDiamondPosition(), currentNode, -1, 0, 0));
+    diamondPositionCurrent = mapCurrent->getDiamondPosition();
+    int hDist = calculateHeuristicDist(diamondPositionCurrent);
+    solutionList_Open.push_back(SolverNode_v2(mapStart->getRobotPosition(), mapStart->getDiamondPosition(), currentNode, -1, 0, hDist));
     numOfNodes++;
     
     
@@ -188,14 +190,15 @@ void Solver_v2::startSolver(){
             std::vector<int> diamondPosTemp = mapCurrent->getDiamondPosition();
             int robotPosTemp = vertex_MovableAndReachable[i][1];
             
+            hDist = calculateHeuristicDist(diamondPosTemp);
+            
             // See if we hit the goal.
-            std::vector<int> diamondGoalPos = mapGoal->getDiamondPosition();
-            if (diamondGoalPos == diamondPosTemp) {
+            if (diamondPositionGoal == diamondPosTemp && dist <= distMax) {
                 numOfSolutions++;
                 solutionID.push_back(numOfNodes);
                 distMax = dist;
                 insertHash(hash(creatHashKey(diamondPosTemp)), diamondPosTemp);
-                solutionList_Open.push_back(SolverNode_v2(robotPosTemp, diamondPosTemp, numOfNodes, currentNode, depth, dist));
+                solutionList_Open.push_back(SolverNode_v2(robotPosTemp, diamondPosTemp, numOfNodes, currentNode, depth, dist, hDist));
                 numOfNodes++;
                 break;
             }
@@ -207,7 +210,7 @@ void Solver_v2::startSolver(){
             if (!lookUpHash_prevAdded( hash(creatHashKey(diamondPosTemp)), diamondPosTemp) && !deadlock) {
                 // Not added before:
                 insertHash(hash(creatHashKey(diamondPosTemp)), diamondPosTemp);
-                solutionList_Open.push_back(SolverNode_v2(robotPosTemp, diamondPosTemp, numOfNodes, currentNode, depth, dist));
+                solutionList_Open.push_back(SolverNode_v2(robotPosTemp, diamondPosTemp, numOfNodes, currentNode, depth, dist, hDist));
                 numOfNodes++;
             }
             
@@ -324,6 +327,53 @@ bool Solver_v2::deadlockCheck(int vertex){
     return false;
 }
 
+int Solver_v2::calculateHeuristicDist(std::vector<int> diamondPos){
+    int hDist = 0;
+    
+    // Which goal is the diamonds connected to:
+    std::vector<int> diamondsConnectedToGoal;
+    
+    for (int i = 0 ; i < numOfDiamonds ; i++) {
+        // Find the smallest straight line distance to the goal.
+        double straightLineDist[numOfDiamonds];
+        int smallest = 0, minDist = __INT_MAX__;
+        for (int j = 0 ; j < numOfDiamonds ; j++) {
+            straightLineDist[j] = pythagoras(diamondPos[i], diamondPositionGoal[j]);
+            // If distance is smaller that preveous, and j is not already assigned:
+            if (straightLineDist[j] < minDist && !contain(diamondsConnectedToGoal, j)) {
+                minDist = straightLineDist[j];
+                smallest = j;
+            }
+        }
+        diamondsConnectedToGoal.push_back(smallest);
+    }
+    
+    // hDist = sum of all x and y differences.
+    for (int i = 0 ; i < numOfDiamonds ; i++) {
+        int xDiff = abs(mapCurrent->getVertex(diamondPos[i]).getXPosition() - mapCurrent->getVertex(diamondPositionGoal.at(diamondsConnectedToGoal[i])).getXPosition());
+        int yDiff = abs(mapCurrent->getVertex(diamondPos[i]).getYPosition() - mapCurrent->getVertex(diamondPositionGoal.at(diamondsConnectedToGoal[i])).getYPosition());
+        hDist = hDist + xDiff + yDiff;
+    }
+    
+    return hDist;
+}
+
+double Solver_v2::pythagoras(int vertex_a, int vertex_b){
+    int x_a = mapCurrent->getVertex(vertex_a).getXPosition();
+    int y_a = mapCurrent->getVertex(vertex_a).getYPosition();
+    int x_b = mapCurrent->getVertex(vertex_b).getXPosition();
+    int y_b = mapCurrent->getVertex(vertex_b).getYPosition();
+    return sqrt((x_a - x_b) * (x_a - x_b) + (y_a - y_b) * (y_a - y_b));
+}
+
+bool Solver_v2::contain(std::vector<int> vec, int num){
+    for (int i = 0 ; i < vec.size() ; i++) {
+        if (vec.at(i) == num) {
+            return true;
+        }
+    }
+    return false;
+}
 
 /********************** Hash functions ************************/
 

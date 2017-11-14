@@ -1,4 +1,4 @@
-22 11 06
+22 11 05
     XXXXX             
     X...X             
     XJ..X             
@@ -6,7 +6,7 @@
   X..J..J.X           
 XXX.X.XXX.X     XXXXXX
 X...X.XXX.XXXXXXX..GGX
-X.J..J.............GGX
+X....J..............GX
 XXXXX.XXXX.XMXXXX..GGX
     X......XXX  XXXXXX
     XXXXXXXX          

@@ -18,6 +18,7 @@
 #include "PPMLoader.hpp"
 #include "Solver.hpp"
 #include "Solver_v2.hpp"
+#include <ctime>
 
 using namespace rw::sensor;
 using namespace rw::loaders;
@@ -28,9 +29,9 @@ int main() {
     
     vector<vector<char>> map_char;
     int map_width = 0, map_height = 0, numOfDimonds = 0;
-    ifstream map;
-    map.open("Bane-copy-2(1).txt");
-    //map.open("map_specs.txt");
+    ifstream map; 
+    //map.open("Bane-copy-2.txt");
+    map.open("map_specs(4).txt");
     if (!map.is_open()) {
         cerr << "ERROR: Could not open map description file." << endl;
         return 0;
@@ -235,7 +236,14 @@ int main() {
     startMap.drawMapAndSave("Images/map_start.ppm");
     
     Solver_v2 solution(start_map, goal_map, numOfDimonds, map_width, map_height);
+    
+    clock_t begin = clock();
     solution.startSolver();
+    clock_t end = clock();
+    double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+    int minutes = elapsed_secs / 60;
+    int seconds = (int)elapsed_secs % 60;
+    
     std::vector<std::vector<SolverNode_v2>> solutionList = solution.getSolution();
     
     for (int j = 0 ; j < solutionList.size() ; j++) {
@@ -248,6 +256,8 @@ int main() {
         }
     }
     
+    
+    cout << "\nFound " << solution.getSolution().size() << " solutions in " << minutes << " minuts, " << seconds << " seconds.\n";
     
     /*
     PathDrawer goalMap(map_width, map_height, goal_map);
