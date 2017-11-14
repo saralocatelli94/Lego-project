@@ -1,10 +1,10 @@
-10 09 04
+10 09 03
      XXXXX
 XXXXXX...X
-X..J.....X
-X..JXXX.XX
-XXGJG.G.GX
- X.JX....X
+X..J....GX
+X..J....GX
+XX.J....GX
+ X.......X
  X.MXXXXXX
  X..X
  XXXX

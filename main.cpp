@@ -29,7 +29,8 @@ int main() {
     vector<vector<char>> map_char;
     int map_width = 0, map_height = 0, numOfDimonds = 0;
     ifstream map;
-    map.open("map_specs.txt");
+    map.open("Bane-copy-2(1).txt");
+    //map.open("map_specs.txt");
     if (!map.is_open()) {
         cerr << "ERROR: Could not open map description file." << endl;
         return 0;
@@ -83,7 +84,17 @@ int main() {
                 map_char[i][j] == 'M') {
                 
                 // Set meta data:
-                string name = to_string(i) + to_string(j);
+                string name = "";
+                if (i < 10) {
+                    name = name + "0" + to_string(i);
+                } else {
+                    name = name + to_string(i);
+                }
+                if (j < 10) {
+                    name = name + "0" + to_string(j);
+                } else {
+                    name = name + to_string(j);
+                }
                 if      (map_char[i][j] == 'J') { dimond = true; }
                 else if (map_char[i][j] == 'G') { goal = true; }
                 else if (map_char[i][j] == 'M') { sokoban = true; }
@@ -108,7 +119,17 @@ int main() {
                 map_char[i][j] == 'G' ||
                 map_char[i][j] == 'M') {
                 
-                string nameCurrent = to_string(i) + to_string(j);
+                string nameCurrent = "";
+                if (i < 10) {
+                    nameCurrent = nameCurrent + "0" + to_string(i);
+                } else {
+                    nameCurrent = nameCurrent + to_string(i);
+                }
+                if (j < 10) {
+                    nameCurrent = nameCurrent + "0" + to_string(j);
+                } else {
+                    nameCurrent = nameCurrent + to_string(j);
+                }
                 
                 // Check for neighbour vertex's:
                 // Above (direction ~ North):
@@ -117,7 +138,17 @@ int main() {
                     map_char[i-1][j] == 'G' ||
                     map_char[i-1][j] == 'M') {
                     
-                    string nameTarget = to_string(i-1) + to_string(j);
+                    string nameTarget = "";
+                    if (i < 11) {
+                        nameTarget = nameTarget + "0" + to_string(i-1);
+                    } else {
+                        nameTarget = nameTarget + to_string(i-1);
+                    }
+                    if (j < 10) {
+                        nameTarget = nameTarget + "0" + to_string(j);
+                    } else {
+                        nameTarget = nameTarget + to_string(j);
+                    }
                     start_map.addEdge(nameCurrent, nameTarget, costOfDriving, 'n');
                 }
                 
@@ -127,7 +158,17 @@ int main() {
                     map_char[i][j+1] == 'G' ||
                     map_char[i][j+1] == 'M') {
                     
-                    string nameTarget = to_string(i) + to_string(j+1);
+                    string nameTarget = "";
+                    if (i < 10) {
+                        nameTarget = nameTarget + "0" + to_string(i);
+                    } else {
+                        nameTarget = nameTarget + to_string(i);
+                    }
+                    if (j < 9) {
+                        nameTarget = nameTarget + "0" + to_string(j+1);
+                    } else {
+                        nameTarget = nameTarget + to_string(j+1);
+                    }
                     start_map.addEdge(nameCurrent, nameTarget, costOfDriving, 'e');
                 }
                 
@@ -137,7 +178,17 @@ int main() {
                     map_char[i+1][j] == 'G' ||
                     map_char[i+1][j] == 'M') {
                     
-                    string nameTarget = to_string(i+1) + to_string(j);
+                    string nameTarget = "";
+                    if (i < 9) {
+                        nameTarget = nameTarget + "0" + to_string(i+1);
+                    } else {
+                        nameTarget = nameTarget + to_string(i+1);
+                    }
+                    if (j < 10) {
+                        nameTarget = nameTarget + "0" + to_string(j);
+                    } else {
+                        nameTarget = nameTarget + to_string(j);
+                    }
                     start_map.addEdge(nameCurrent, nameTarget, costOfDriving, 's');
                 }
                 
@@ -147,7 +198,17 @@ int main() {
                     map_char[i][j-1] == 'G' ||
                     map_char[i][j-1] == 'M') {
                     
-                    string nameTarget = to_string(i) + to_string(j-1);
+                    string nameTarget = "";
+                    if (i < 10) {
+                        nameTarget = nameTarget + "0" + to_string(i);
+                    } else {
+                        nameTarget = nameTarget + to_string(i);
+                    }
+                    if (j < 11) {
+                        nameTarget = nameTarget + "0" + to_string(j-1);
+                    } else {
+                        nameTarget = nameTarget + to_string(j-1);
+                    }
                     start_map.addEdge(nameCurrent, nameTarget, costOfDriving, 'w');
                 }
             }

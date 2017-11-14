@@ -66,7 +66,7 @@ private:
     unsigned int const BLACK            = 0;
     
     // _MAP_SCALER scales up the image. if the initial width is 10, the scaler makes it 10*_MAP_SCALER. _ROBOT_WIDTH and _OBJECT_BOARDER is defined in initConstants(), and scales down the objects and robot radius according to the _MAP_SCALER.
-    unsigned int const _MAP_SCALER  = 100;
+    unsigned int const _MAP_SCALER  = 60;
     unsigned int _ROBOT_WIDTH;
     unsigned int _OBJECT_BOARDER;
 };

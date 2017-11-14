@@ -18,21 +18,21 @@ Vertex::~Vertex(){
 
 Vertex::Vertex(int i, std::string n):
 index(i), name(n){
-    xPosition = stoi(n) % 10;
-    yPosition = stoi(n) / 10;
+    xPosition = stoi(n) % 100;
+    yPosition = stoi(n) / 100;
 }
 
 Vertex::Vertex(int i, std::string n, bool d, bool g, bool s):
 index(i), name(n), diamond(d), goal(g), sokoban(s), goalReached(false){
     sokobanDirection = '0';
-    xPosition = stoi(n) % 10;
-    yPosition = stoi(n) / 10;
+    xPosition = stoi(n) % 100;
+    yPosition = stoi(n) / 100;
 }
 
 Vertex::Vertex(int i, std::string n, bool d, bool g, bool s, char sD):
 index(i), name(n), diamond(d), goal(g), sokoban(s){
-    xPosition = stoi(n) % 10;
-    yPosition = stoi(n) / 10;
+    xPosition = stoi(n) % 100;
+    yPosition = stoi(n) / 100;
     if (s)
         sokobanDirection = sD;
     else

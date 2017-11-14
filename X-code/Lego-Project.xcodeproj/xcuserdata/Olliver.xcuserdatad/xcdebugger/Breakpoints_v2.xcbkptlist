@@ -250,11 +250,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../main.cpp"
-            timestampString = "532287991.87241"
+            timestampString = "532343849.548197"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "169"
-            endingLineNumber = "169"
+            startingLineNumber = "230"
+            endingLineNumber = "230"
             landmarkName = "main()"
             landmarkType = "9">
          </BreakpointContent>
@@ -266,11 +266,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../main.cpp"
-            timestampString = "532288120.494708"
+            timestampString = "532343849.548197"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "156"
-            endingLineNumber = "156"
+            startingLineNumber = "217"
+            endingLineNumber = "217"
             landmarkName = "main()"
             landmarkType = "9">
          </BreakpointContent>
@@ -282,11 +282,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../main.cpp"
-            timestampString = "532288509.299451"
+            timestampString = "532343563.605321"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "100"
-            endingLineNumber = "100"
+            startingLineNumber = "111"
+            endingLineNumber = "111"
             landmarkName = "main()"
             landmarkType = "9">
          </BreakpointContent>
@@ -394,11 +394,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Lego-Project/Solver_v2.cpp"
-            timestampString = "532339975.307159"
+            timestampString = "532340186.930049"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "239"
-            endingLineNumber = "239"
+            startingLineNumber = "235"
+            endingLineNumber = "235"
             landmarkName = "Solver_v2::startSolver()"
             landmarkType = "7">
          </BreakpointContent>
@@ -410,11 +410,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Lego-Project/Solver_v2.cpp"
-            timestampString = "532339975.307159"
+            timestampString = "532340186.930049"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "219"
-            endingLineNumber = "219"
+            startingLineNumber = "215"
+            endingLineNumber = "215"
             landmarkName = "Solver_v2::startSolver()"
             landmarkType = "7">
          </BreakpointContent>
@@ -458,11 +458,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Lego-Project/Solver_v2.cpp"
-            timestampString = "532339975.307159"
+            timestampString = "532340186.930049"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "238"
-            endingLineNumber = "238"
+            startingLineNumber = "234"
+            endingLineNumber = "234"
             landmarkName = "Solver_v2::startSolver()"
             landmarkType = "7">
          </BreakpointContent>
@@ -474,11 +474,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Lego-Project/Solver_v2.cpp"
-            timestampString = "532339975.307159"
+            timestampString = "532340186.930049"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "232"
-            endingLineNumber = "232"
+            startingLineNumber = "228"
+            endingLineNumber = "228"
             landmarkName = "Solver_v2::startSolver()"
             landmarkType = "7">
          </BreakpointContent>
@@ -490,11 +490,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Lego-Project/Solver_v2.cpp"
-            timestampString = "532339975.307159"
+            timestampString = "532340186.930049"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "241"
-            endingLineNumber = "241"
+            startingLineNumber = "237"
+            endingLineNumber = "237"
             landmarkName = "Solver_v2::startSolver()"
             landmarkType = "7">
          </BreakpointContent>
@@ -506,11 +506,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Lego-Project/Solver_v2.cpp"
-            timestampString = "532339975.307159"
+            timestampString = "532340186.930049"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "258"
-            endingLineNumber = "258"
+            startingLineNumber = "254"
+            endingLineNumber = "254"
             landmarkName = "Solver_v2::startSolver()"
             landmarkType = "7">
          </BreakpointContent>
@@ -522,11 +522,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Lego-Project/Solver_v2.cpp"
-            timestampString = "532339975.307159"
+            timestampString = "532340186.930049"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "246"
-            endingLineNumber = "246"
+            startingLineNumber = "242"
+            endingLineNumber = "242"
             landmarkName = "Solver_v2::startSolver()"
             landmarkType = "7">
          </BreakpointContent>
@@ -538,11 +538,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Lego-Project/Solver_v2.cpp"
-            timestampString = "532339975.307159"
+            timestampString = "532340186.930049"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "252"
-            endingLineNumber = "252"
+            startingLineNumber = "248"
+            endingLineNumber = "248"
             landmarkName = "Solver_v2::startSolver()"
             landmarkType = "7">
          </BreakpointContent>
@@ -554,11 +554,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Lego-Project/Solver_v2.cpp"
-            timestampString = "532339975.307159"
+            timestampString = "532340186.930049"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "261"
-            endingLineNumber = "261"
+            startingLineNumber = "257"
+            endingLineNumber = "257"
             landmarkName = "Solver_v2::startSolver()"
             landmarkType = "7">
          </BreakpointContent>
@@ -586,11 +586,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Lego-Project/Solver_v2.cpp"
-            timestampString = "532339975.307159"
+            timestampString = "532340186.930049"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "371"
-            endingLineNumber = "371"
+            startingLineNumber = "367"
+            endingLineNumber = "367"
             landmarkName = "Solver_v2::lookUpHash_prevAdded(int hashVal, std::vector&lt;int&gt; diamondPos)"
             landmarkType = "7">
          </BreakpointContent>
@@ -602,11 +602,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Lego-Project/Solver_v2.cpp"
-            timestampString = "532339975.307159"
+            timestampString = "532340186.930049"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "383"
-            endingLineNumber = "383"
+            startingLineNumber = "379"
+            endingLineNumber = "379"
             landmarkName = "Solver_v2::lookUpHash_prevAdded(int hashVal, std::vector&lt;int&gt; diamondPos)"
             landmarkType = "7">
          </BreakpointContent>
@@ -618,7 +618,23 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Lego-Project/Solver_v2.cpp"
-            timestampString = "532339975.307159"
+            timestampString = "532340186.930049"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "372"
+            endingLineNumber = "372"
+            landmarkName = "Solver_v2::lookUpHash_prevAdded(int hashVal, std::vector&lt;int&gt; diamondPos)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Lego-Project/Solver_v2.cpp"
+            timestampString = "532340186.930049"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "376"
@@ -634,12 +650,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Lego-Project/Solver_v2.cpp"
-            timestampString = "532339975.307159"
+            timestampString = "532340186.930049"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "380"
-            endingLineNumber = "380"
-            landmarkName = "Solver_v2::lookUpHash_prevAdded(int hashVal, std::vector&lt;int&gt; diamondPos)"
+            startingLineNumber = "226"
+            endingLineNumber = "226"
+            landmarkName = "Solver_v2::startSolver()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -649,14 +665,46 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Lego-Project/Solver_v2.cpp"
-            timestampString = "532339975.307159"
+            filePath = "../main.cpp"
+            timestampString = "532342526.388162"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "230"
-            endingLineNumber = "230"
-            landmarkName = "Solver_v2::startSolver()"
-            landmarkType = "7">
+            startingLineNumber = "60"
+            endingLineNumber = "60"
+            landmarkName = "main()"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../main.cpp"
+            timestampString = "532342574.660339"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "64"
+            endingLineNumber = "64"
+            landmarkName = "main()"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../main.cpp"
+            timestampString = "532343849.548197"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "236"
+            endingLineNumber = "236"
+            landmarkName = "main()"
+            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
