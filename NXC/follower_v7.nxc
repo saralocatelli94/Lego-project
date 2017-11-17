@@ -1,0 +1,205 @@
+#define LEFT_MOTOR OUT_A
+#define RIGHT_MOTOR OUT_C
+#define BOTH_MOTOR OUT_AC
+
+#define FORWARD_SPEED_RIGHT 70
+#define FORWARD_SPEED_LEFT 73
+#define REVERSE_SPEED -60
+
+#define LEFT_SENSOR IN_1
+#define RIGHT_SENSOR IN_4
+#define CROSS_SENSOR IN_2
+#define TOP_SENSOR IN_1
+#define LIGHT_LIMIT 48
+#define CROSS_LIMIT 35
+
+bool backwards=false;
+bool isTurning = false;
+mutex moveMutex;
+mutex crossMutex;
+
+task senseLeft()
+{
+
+ while(true)
+ {
+
+  until(!isTurning  && (Sensor(LEFT_SENSOR) < LIGHT_LIMIT));  // left sensor is over line
+  Acquire(moveMutex);
+  if(!backwards)
+  {
+    Float(LEFT_MOTOR);                                 // turn right if direction=forwards
+    until(Sensor(LEFT_SENSOR) > LIGHT_LIMIT);
+    //Wait(1);
+    OnFwd(LEFT_MOTOR, FORWARD_SPEED_LEFT);
+  }
+  else
+  {
+    Float(RIGHT_MOTOR);                                 // turn right if direction=forwards
+    until(Sensor(RIGHT_SENSOR) > LIGHT_LIMIT);
+    //Wait(1);
+    OnFwd(RIGHT_MOTOR, -FORWARD_SPEED_RIGHT);
+  }
+  Release(moveMutex);
+
+ }
+}
+
+
+task senseRight()
+{
+ while(true)
+ {
+
+  until(!isTurning && (Sensor(RIGHT_SENSOR) < LIGHT_LIMIT));  // left sensor is over line
+  Acquire(moveMutex);
+  if(!backwards){
+  Float(RIGHT_MOTOR);                               // turn left  if direction=forward
+  until(Sensor(RIGHT_SENSOR) > LIGHT_LIMIT);
+ // Wait(1);
+  OnFwd(RIGHT_MOTOR, FORWARD_SPEED_RIGHT);
+  }
+  else
+  {
+  PlayToneEx(350,500,8, FALSE);
+  Float(LEFT_MOTOR);
+  //Wait(1000);                            // turn left  if direction=forward
+  until(Sensor(LEFT_SENSOR) > LIGHT_LIMIT);
+  OnFwd(LEFT_MOTOR, -FORWARD_SPEED_LEFT);
+  }
+   Release(moveMutex);
+
+ }
+}
+
+
+
+
+
+
+
+task move()
+{
+
+ //int moveList[200] = {1,2,4,3,1,5,4,2,1,3,3,1};
+  int moveList[200] = {1,5,2,5,3,5,4};
+ int index = 0;
+ while(index<ArrayLen(moveList))
+ {
+
+     until(Sensor(CROSS_SENSOR) < CROSS_LIMIT);                  // robot at intersection
+ // PlayToneEx(350,500,8, FALSE);
+ Acquire(moveMutex);
+   isTurning = true;
+
+   switch(moveList[index])
+   {
+    case(1):
+    {
+     backwards=false;
+     OnFwd(RIGHT_MOTOR, FORWARD_SPEED_RIGHT);
+     OnFwd(LEFT_MOTOR, FORWARD_SPEED_LEFT);
+     PlayToneEx(350,500,8, FALSE);
+     Wait(200);
+     Release(moveMutex);
+     break;
+    }
+    case(2): //turn left
+    {
+     backwards=false;
+     Float(BOTH_MOTOR);
+     OnFwd(RIGHT_MOTOR, FORWARD_SPEED_RIGHT);
+     OnFwd(LEFT_MOTOR, FORWARD_SPEED_LEFT);
+     until(Sensor(RIGHT_SENSOR)< LIGHT_LIMIT &  Sensor(LEFT_SENSOR)< LIGHT_LIMIT);
+     Wait(70);
+     OnFwd(RIGHT_MOTOR, FORWARD_SPEED_RIGHT);
+     OnFwd(LEFT_MOTOR, -FORWARD_SPEED_LEFT);
+     until(Sensor(CROSS_SENSOR)<CROSS_LIMIT);
+     until(Sensor(LEFT_SENSOR)>LIGHT_LIMIT && Sensor(RIGHT_SENSOR)>LIGHT_LIMIT);
+     Wait(70);
+     OnFwd(RIGHT_MOTOR, FORWARD_SPEED_RIGHT);
+     OnFwd(LEFT_MOTOR, FORWARD_SPEED_LEFT);
+     Release(moveMutex);
+     break;
+    }
+
+    case(3):
+    {
+      backwards=false;
+      OnFwd(RIGHT_MOTOR, FORWARD_SPEED_RIGHT);
+      OnFwd(LEFT_MOTOR, FORWARD_SPEED_LEFT);
+      until(Sensor(RIGHT_SENSOR)< LIGHT_LIMIT &  Sensor(LEFT_SENSOR)< LIGHT_LIMIT);
+      Wait(70);
+      OnFwd(RIGHT_MOTOR, -FORWARD_SPEED_RIGHT);
+      OnFwd(LEFT_MOTOR, FORWARD_SPEED_LEFT);
+      until(Sensor(CROSS_SENSOR)<CROSS_LIMIT);
+      until(Sensor(RIGHT_SENSOR)<LIGHT_LIMIT);
+      until(Sensor(LEFT_SENSOR)>LIGHT_LIMIT && Sensor(RIGHT_SENSOR)>LIGHT_LIMIT);
+      Wait(80);
+     // Wait(225);
+      OnFwd(RIGHT_MOTOR, FORWARD_SPEED_RIGHT);
+      OnFwd(LEFT_MOTOR, FORWARD_SPEED_LEFT);
+     Release(moveMutex);
+     break;
+    }
+
+    case(4): //turn 180
+    {
+    PlayToneEx(350,500,8, FALSE);
+     backwards=false;
+     OnFwd(RIGHT_MOTOR, FORWARD_SPEED_RIGHT);
+     OnFwd(LEFT_MOTOR, FORWARD_SPEED_LEFT);
+     until(Sensor(RIGHT_SENSOR)< LIGHT_LIMIT &  Sensor(LEFT_SENSOR)< LIGHT_LIMIT);
+     Wait(70);
+     OnFwd(RIGHT_MOTOR, FORWARD_SPEED_RIGHT);
+     OnFwd(LEFT_MOTOR, -FORWARD_SPEED_LEFT);
+     until(Sensor(CROSS_SENSOR)<CROSS_LIMIT);
+     until(Sensor(CROSS_SENSOR)>CROSS_LIMIT);
+     until(Sensor(CROSS_SENSOR)<CROSS_LIMIT);
+     until(Sensor(LEFT_SENSOR)>LIGHT_LIMIT && Sensor(RIGHT_SENSOR)>LIGHT_LIMIT);
+     Wait(70);
+     OnFwd(RIGHT_MOTOR, FORWARD_SPEED_RIGHT);
+     OnFwd(LEFT_MOTOR, FORWARD_SPEED_LEFT);
+     Release(moveMutex);
+     break;
+    }
+      case(5):
+    {
+     backwards=true;
+
+     Float(BOTH_MOTOR);
+     OnFwd(RIGHT_MOTOR, -FORWARD_SPEED_RIGHT);
+     OnFwd(LEFT_MOTOR, -FORWARD_SPEED_LEFT);
+     Wait(400);
+     Release(moveMutex);
+     break;
+    }
+
+    default:    //stop the robot
+                while(true)
+                Float(BOTH_MOTOR);
+  }
+  ++index;
+  isTurning = false;
+
+ }
+ while(true)
+            Float(BOTH_MOTOR);
+}
+
+task main()
+{
+ SetSensorLight(LEFT_SENSOR);
+ SetSensorLight(RIGHT_SENSOR);
+ SetSensorLight(CROSS_SENSOR);
+ OnFwd(LEFT_MOTOR, FORWARD_SPEED_LEFT);
+ OnFwd(RIGHT_MOTOR, FORWARD_SPEED_RIGHT);
+
+ /* while(true){
+    printf("light level L%d", Sensor(LEFT_SENSOR));
+ }     */
+ backwards=false;
+ Precedes(senseLeft, senseRight,move);
+
+}
+
