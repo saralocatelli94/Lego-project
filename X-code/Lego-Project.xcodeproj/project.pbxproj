@@ -18,6 +18,7 @@
 		5A57B1541F90C9AB00CF8EE2 /* PPMLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A57B1481F90C9AB00CF8EE2 /* PPMLoader.cpp */; };
 		5A57B1551F90C9AB00CF8EE2 /* Vertex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A57B14A1F90C9AB00CF8EE2 /* Vertex.cpp */; };
 		5A57B1561F90C9AB00CF8EE2 /* VertexList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A57B14C1F90C9AB00CF8EE2 /* VertexList.cpp */; };
+		5A9C73BD1FBC9425008D3F25 /* SolutionConverter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A9C73BB1FBC9425008D3F25 /* SolutionConverter.cpp */; };
 		5AF673561FA8E3AB008440A2 /* Solver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF673541FA8E3AB008440A2 /* Solver.cpp */; };
 		5AF673591FAA57D5008440A2 /* SolverNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF673571FAA57D5008440A2 /* SolverNode.cpp */; };
 /* End PBXBuildFile section */
@@ -58,6 +59,8 @@
 		5A57B14B1F90C9AB00CF8EE2 /* Vertex.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Vertex.hpp; path = ../../Vertex.hpp; sourceTree = "<group>"; };
 		5A57B14C1F90C9AB00CF8EE2 /* VertexList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VertexList.cpp; path = ../../VertexList.cpp; sourceTree = "<group>"; };
 		5A57B14D1F90C9AB00CF8EE2 /* VertexList.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = VertexList.hpp; path = ../../VertexList.hpp; sourceTree = "<group>"; };
+		5A9C73BB1FBC9425008D3F25 /* SolutionConverter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SolutionConverter.cpp; sourceTree = "<group>"; };
+		5A9C73BC1FBC9425008D3F25 /* SolutionConverter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SolutionConverter.hpp; sourceTree = "<group>"; };
 		5AF673541FA8E3AB008440A2 /* Solver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Solver.cpp; sourceTree = "<group>"; };
 		5AF673551FA8E3AB008440A2 /* Solver.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Solver.hpp; sourceTree = "<group>"; };
 		5AF673571FAA57D5008440A2 /* SolverNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SolverNode.cpp; sourceTree = "<group>"; };
@@ -95,6 +98,8 @@
 			isa = PBXGroup;
 			children = (
 				5A57B1421F90C9AB00CF8EE2 /* main.cpp */,
+				5A9C73BB1FBC9425008D3F25 /* SolutionConverter.cpp */,
+				5A9C73BC1FBC9425008D3F25 /* SolutionConverter.hpp */,
 				5A3E0E5D1FB5D6D800C6BF3C /* Solver_v2.cpp */,
 				5A3E0E5E1FB5D6D800C6BF3C /* Solver_v2.hpp */,
 				5A3E0E601FB5D6EB00C6BF3C /* SolverNode_v2.cpp */,
@@ -194,6 +199,7 @@
 				5AF673591FAA57D5008440A2 /* SolverNode.cpp in Sources */,
 				5A57B1521F90C9AB00CF8EE2 /* Node.cpp in Sources */,
 				5A57B1561F90C9AB00CF8EE2 /* VertexList.cpp in Sources */,
+				5A9C73BD1FBC9425008D3F25 /* SolutionConverter.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -24,7 +24,7 @@ public:
     
     Solver_v2(Graph & mStart, Graph & mGoal, int numOfDia, int width, int height);
     
-    void startSolver();
+    void startSolver(bool allowRobotToReverse = true);
     
     std::vector<std::vector<SolverNode_v2>> getSolution();
     

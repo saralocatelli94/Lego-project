@@ -32,7 +32,7 @@ mapStart(&mS), mapGoal(&mG), mapCurrent(&mS), numOfDiamonds(numOfDia), map_width
 
 /********************** Solver functions ************************/
 
-void Solver_v2::startSolver(){
+void Solver_v2::startSolver(bool allowRobotToReverse){
     /**
      Steps for solving:
      
@@ -66,7 +66,7 @@ void Solver_v2::startSolver(){
     
     diamondPositionCurrent = mapCurrent->getDiamondPosition();
     int hDist = calculateHeuristicDist(diamondPositionCurrent);
-    solutionList_Open.push_back(SolverNode_v2(mapStart->getRobotPosition(), mapStart->getDiamondPosition(), currentNode, -1, 0, hDist));
+    solutionList_Open.push_back(SolverNode_v2(mapStart->getRobotPosition(), mapStart->getRobotPosition(), mapStart->getDiamondPosition(), currentNode, -1, 0, 0, hDist));
     numOfNodes++;
     
     
@@ -162,7 +162,7 @@ void Solver_v2::startSolver(){
                            mapCurrent->getVertex(currentRobotPosition),
                            mapCurrent->getVertex(vertex_MovableFreeSpace[i][0]),
                            direction);
-                if (path.runAStar()) {
+                if (path.runAStar(allowRobotToReverse)) {
                     std::vector<int> temp;
                     temp.push_back(vertex_MovableFreeSpace[i][0]);      //
                     temp.push_back(vertex_MovableFreeSpace[i][1]);      //
@@ -198,7 +198,7 @@ void Solver_v2::startSolver(){
                 solutionID.push_back(numOfNodes);
                 distMax = dist;
                 insertHash(hash(creatHashKey(diamondPosTemp)), diamondPosTemp);
-                solutionList_Open.push_back(SolverNode_v2(robotPosTemp, diamondPosTemp, numOfNodes, currentNode, depth, dist, hDist));
+                solutionList_Open.push_back(SolverNode_v2(vertex_MovableAndReachable[i][0], robotPosTemp, diamondPosTemp, numOfNodes, currentNode, depth, dist, hDist));
                 numOfNodes++;
                 break;
             }
@@ -210,7 +210,7 @@ void Solver_v2::startSolver(){
             if (!lookUpHash_prevAdded( hash(creatHashKey(diamondPosTemp)), diamondPosTemp) && !deadlock) {
                 // Not added before:
                 insertHash(hash(creatHashKey(diamondPosTemp)), diamondPosTemp);
-                solutionList_Open.push_back(SolverNode_v2(robotPosTemp, diamondPosTemp, numOfNodes, currentNode, depth, dist, hDist));
+                solutionList_Open.push_back(SolverNode_v2(vertex_MovableAndReachable[i][0], robotPosTemp, diamondPosTemp, numOfNodes, currentNode, depth, dist, hDist));
                 numOfNodes++;
             }
             
@@ -231,7 +231,7 @@ void Solver_v2::startSolver(){
         
         // Reset to next configuration in open-list:
         if (currentNode <= numOfNodes) {
-            mapCurrent->setAllVertexInfo(solutionList_Open.at(currentNode).diamondPositions, solutionList_Open.at(currentNode).position);
+            mapCurrent->setAllVertexInfo(solutionList_Open.at(currentNode).diamondPositions, solutionList_Open.at(currentNode).positionAfter);
             distCurrent = solutionList_Open.at(currentNode).distanceTotal;
         }
         
@@ -257,22 +257,23 @@ void Solver_v2::startSolver(){
         
         solutionList_Closed.push_back(solutionFlip);
     }
-    
+    /*
     // Print the solutions as images:
     for (int j = 0 ; j < numOfSolutions ; j++) {
         for (int i = 1 ; i < solutionList_Closed[j].size() ; i++) {
             Graph temp = *mapCurrent;
             std::vector<int> dPosTemp = solutionList_Closed[j][i].diamondPositions;
-            int robotPos = solutionList_Closed[j][i].position;
+            int robotPos = solutionList_Closed[j][i].positionAfter;
             temp.setAllVertexInfo(dPosTemp, robotPos);
-            AStar aStarTest(temp, temp.getVertex(solutionList_Closed[j][i-1].position), temp.getVertex(solutionList_Closed[j][i].position), 'n');
+            AStar aStarTest(temp, temp.getVertex(solutionList_Closed[j][i-1].positionAfter), temp.getVertex(solutionList_Closed[j][i].positionAfter), 'n');
             
             PathDrawer a(map_width, map_height, temp);
             a.drawMapAndSave("Images/solution" + std::to_string(j+1) + "_step" + std::to_string(i) + "_ID" + std::to_string(solutionList_Closed[j][i].ID) + ".ppm");
         }
     }
-    
-    std::cout << "Num of solutions: " << numOfSolutions << std::endl;
+    */
+    std::cout << "Num of nodes in openlist: " << numOfNodes << std::endl;
+    std::cout << "Num of solutions:         " << numOfSolutions << std::endl;
 }
 
 std::vector<std::vector<SolverNode_v2>> Solver_v2::getSolution() {

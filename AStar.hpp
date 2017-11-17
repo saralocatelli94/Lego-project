@@ -22,8 +22,9 @@ public:
     AStar();
     
     AStar(Graph roadMap, Vertex vertexStart, Vertex vertexGoal, char directionGoal);
+    AStar(Graph roadMap, Vertex vertexStart, Vertex vertexGoal, char directionStart, char directionGoal);
     
-    bool runAStar();
+    bool runAStar(bool allowSokobanToReverse = true);
     std::vector<VertexList> getPath();
     
     void printVertexToGoal();
@@ -35,6 +36,7 @@ protected:
     Vertex vStart, vGoal;
     int currentVertexIndex;
     char directionGoal;
+    char directionStart;
     
     std::vector<VertexList> vertexOpenList;
     std::vector<VertexList> vertexClosedList;
@@ -43,7 +45,7 @@ protected:
 private:
     bool validStartAndGoal();
     double heuristicDistance(Vertex current, Vertex goal);
-    double calcWeight(VertexList closedListVertex, Edge newDirection);
+    double calcWeight(VertexList closedListVertex, Edge newDirection, bool reverse);
     char calcOrientation(char currentOrientation, char edgeDirection);
     double const turningMultiplyer = 1.75;
 };

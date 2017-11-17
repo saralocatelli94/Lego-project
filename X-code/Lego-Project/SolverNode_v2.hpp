@@ -18,10 +18,11 @@ struct SolverNode_v2{
     SolverNode_v2();
     ~SolverNode_v2();
     
-    SolverNode_v2(int pos, std::vector<int> dPos, int id_current, int id_prev, int depth, int distTravl, int distHeuristic = 0);
+    SolverNode_v2(int posB, int posA, std::vector<int> dPos, int id_current, int id_prev, int depth, int distTravl, int distHeuristic = 0);
     
     // Robot position:
-    int position;
+    int positionBefore;         // Before moving diamond
+    int positionAfter;          // After moving diamond
     
     // Diamond positions:
     std::vector<int> diamondPositions;

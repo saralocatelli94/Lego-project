@@ -18,6 +18,7 @@
 #include "PPMLoader.hpp"
 #include "Solver.hpp"
 #include "Solver_v2.hpp"
+#include "SolutionConverter.hpp"
 #include <ctime>
 
 using namespace rw::sensor;
@@ -25,13 +26,16 @@ using namespace rw::loaders;
 
 using namespace std;
 
+char calcDirection(Graph &G, int indexInit, int indexPost);
+
 int main() {
     
     vector<vector<char>> map_char;
     int map_width = 0, map_height = 0, numOfDimonds = 0;
+    bool reverse = false;
     ifstream map; 
     //map.open("Bane-copy-2.txt");
-    map.open("map_specs(4).txt");
+    map.open("map_specs(2).txt");
     if (!map.is_open()) {
         cerr << "ERROR: Could not open map description file." << endl;
         return 0;
@@ -232,13 +236,13 @@ int main() {
     cout << "Road map string: " << start_map.getGraphRepresentation() << endl;
     cout << "Goal map string: " << goal_map.getGraphRepresentation() << endl;
     
-    PathDrawer startMap(map_width, map_height, start_map);
-    startMap.drawMapAndSave("Images/map_start.ppm");
+    //PathDrawer startMap(map_width, map_height, start_map);
+    //startMap.drawMapAndSave("Images/map_start.ppm");
     
     Solver_v2 solution(start_map, goal_map, numOfDimonds, map_width, map_height);
     
     clock_t begin = clock();
-    solution.startSolver();
+    solution.startSolver(reverse);
     clock_t end = clock();
     double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
     int minutes = elapsed_secs / 60;
@@ -247,30 +251,65 @@ int main() {
     std::vector<std::vector<SolverNode_v2>> solutionList = solution.getSolution();
     
     for (int j = 0 ; j < solutionList.size() ; j++) {
-        cout << "Solution " << j << "\n";
+        cout << "Solution " << j+1 << "\n";
         for (int i = 0 ; i < solutionList[j].size() ; i++) {
-            cout << "ID: " << solutionList[j][i].ID
-            << " PrevID: " << solutionList[j][i].prevID
-            << " Depth: " << solutionList[j][i].depthInTree
-            << " Distance: " << solutionList[j][i].distanceTraveled << endl;
+            cout << setw(4) << "ID: " << setw(7) << solutionList[j][i].ID
+            << setw(9) << " | PrevID:" << setw(7) << solutionList[j][i].prevID
+            << setw(8) << " | Depth:" << setw(4) << solutionList[j][i].depthInTree
+            << setw(14) << " | Robot steps:" << setw(5) << solutionList[j][i].distanceTraveled << endl;
+            
+            if (i > 0) {
+                
+                // Make images of the solution:
+                std::vector<int> dPosTemp = solutionList[j][i-1].diamondPositions;
+                int robotPos = solutionList[j][i-1].positionAfter;
+                start_map.setAllVertexInfo(dPosTemp, robotPos);
+                
+                PathDrawer a(map_width, map_height, start_map);
+                a.drawMapAndSave("Images/solution" + std::to_string(j+1) + "_step" + std::to_string(i-1) + ".ppm");
+                
+                char dirInit = start_map.getVertex(robotPos).getSokobanDirection();
+                char dirPost = calcDirection(start_map, solutionList[j][i].positionBefore, solutionList[j][i].positionAfter);
+                
+                AStar aStarTest(start_map, start_map.getVertex(solutionList[j][i-1].positionAfter), start_map.getVertex(solutionList[j][i].positionBefore), dirInit, dirPost);
+                aStarTest.runAStar(false);
+                if (aStarTest.getPath().size() > 2) {
+                    std::vector<VertexList> path = aStarTest.getPath();
+                    PathDrawer b(map_width, map_height, start_map, path);
+                    b.drawPathAndSave("Images/solution" + std::to_string(j+1) + "_step" + std::to_string(i-1) + "path.ppm");
+                }
+                
+                if (i == solutionList[j].size()-1) {
+                    
+                    // Make images of the solution:
+                    dPosTemp = solutionList[j][i].diamondPositions;
+                    robotPos = solutionList[j][i].positionAfter;
+                    start_map.setAllVertexInfo(dPosTemp, robotPos);
+                    
+                    PathDrawer a(map_width, map_height, start_map);
+                    a.drawMapAndSave("Images/solution" + std::to_string(j+1) + "_step" + std::to_string(i) + ".ppm");
+                    
+                }
+            }
         }
     }
     
-    
     cout << "\nFound " << solution.getSolution().size() << " solutions in " << minutes << " minuts, " << seconds << " seconds.\n";
+    cout << "A total of: " << elapsed_secs << " seconds.\n";
     
-    /*
-    PathDrawer goalMap(map_width, map_height, goal_map);
-    goalMap.drawMapAndSave("goalMap.ppm");
+    SolutionConverter convertion(start_map, solutionList, defaultSokobanDirection, "solution");
+    convertion.startConverter(reverse);
     
-    AStar aStarTest(road_map, road_map.getVertex("63"), road_map.getVertex("22"), 'n');
-    //AStar aStarTest(road_map, road_map.getVertex("18"), road_map.getVertex("63"), 'n');
-    if (aStarTest.runAStar()) {
-        std::vector<VertexList> path = aStarTest.getPath();
-        
-        PathDrawer Test(map_width, map_height, road_map, path);
-        Test.drawPathAndSave("Map_test.ppm");
-    }
-    */
+    
     return 0;
 }
+
+char calcDirection(Graph &G, int indexInit, int indexPost){
+    for (int i = 0 ; i < G.getVertex(indexInit).connections.size() ; i++) {
+        if (G.getVertex(indexInit).connections[i].getTarget()->getIndex() == indexPost) {
+            return G.getVertex(indexInit).connections[i].getDirection();
+        }
+    }
+    return '0';
+}
+

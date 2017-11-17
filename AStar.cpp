@@ -14,10 +14,15 @@ AStar::AStar(){
 
 AStar::AStar(Graph roadMap, Vertex vertexStart, Vertex vertexGoal, char dirGoal):
 map(roadMap), vStart(vertexStart), vGoal(vertexGoal), directionGoal(dirGoal){
-    //orientationOfRobot = vStart.getSokobanDirection();
+    directionStart = '0';
 }
 
-bool AStar::runAStar(){
+AStar::AStar(Graph roadMap, Vertex vertexStart, Vertex vertexGoal, char dirStart, char dirGoal):
+map(roadMap), vStart(vertexStart), vGoal(vertexGoal), directionStart(dirStart), directionGoal(dirGoal){
+    
+}
+
+bool AStar::runAStar(bool allowSokobanToReverse){
     if (!validStartAndGoal()) {
         //std::cerr << "Goal and/or start not valid.\n";
         //return false;
@@ -26,9 +31,7 @@ bool AStar::runAStar(){
     currentVertexIndex = vStart.getIndex();
     
     // Add startVertex to visited list:
-    vertexClosedList.push_back(VertexList(&map.getVertex(currentVertexIndex), NULL,
-                                          0, heuristicDistance(vStart, vGoal),
-                                          map.getVertex(currentVertexIndex).getSokobanDirection()));
+    vertexClosedList.push_back(VertexList(&map.getVertex(currentVertexIndex), NULL, 0, heuristicDistance(vStart, vGoal), directionStart));
     
     int openListIndex = 0;
     int closedListIndex = 0;
@@ -65,11 +68,18 @@ bool AStar::runAStar(){
                 !map.getVertex(currentVertexIndex).connections[i].getTarget()->getDiamond())
             {
                 // See if ro robot needs to turn 90 degree
-                double weight = calcWeight(vertexClosedList[closedListIndex], map.getVertex(currentVertexIndex).connections[i]);
+                
+                double weight = calcWeight(vertexClosedList[closedListIndex], map.getVertex(currentVertexIndex).connections[i], allowSokobanToReverse);
                 
                 // See of the robot should revers:
-                char orientation = calcOrientation(vertexClosedList[closedListIndex].orientationOfRobot,
+                char orientation;
+                if (allowSokobanToReverse) {
+                    orientation = calcOrientation(vertexClosedList[closedListIndex].orientationOfRobot,
                                                    map.getVertex(currentVertexIndex).connections[i].getDirection());
+                }
+                else {
+                    orientation = map.getVertex(currentVertexIndex).connections[i].getDirection();
+                }
 
                 vertexOpenList.push_back(VertexList(map.getVertex(currentVertexIndex).connections[i].getTarget(),
                                                     &map.getVertex(currentVertexIndex),
@@ -85,13 +95,18 @@ bool AStar::runAStar(){
                     (map.getVertex(currentVertexIndex).connections[i].getWeight() + vertexClosedList[closedListIndex].costTravel))
                 {
                     // See if ro robot needs to turn 90 degree
-                    double weight = calcWeight(vertexClosedList[closedListIndex], map.getVertex(currentVertexIndex).connections[i]);
-                    
+                    double weight = calcWeight(vertexClosedList[closedListIndex], map.getVertex(currentVertexIndex).connections[i], allowSokobanToReverse);
+                    char orientation;
                     // See of the robot should revers:
-                    char orientation = calcOrientation(vertexClosedList[closedListIndex].orientationOfRobot,
-                                                       map.getVertex(currentVertexIndex).connections[i].getDirection());
+                    if (allowSokobanToReverse) {
+                        orientation = calcOrientation(vertexClosedList[closedListIndex].orientationOfRobot,
+                                                      map.getVertex(currentVertexIndex).connections[i].getDirection());
+                    }
+                    else {
+                        orientation = map.getVertex(currentVertexIndex).connections[i].getDirection();
+                    }
                     
-                    vertexOpenList[openListIndex].vertexPrevious = map.getVertex(currentVertexIndex).connections[i].getTarget();
+                    vertexOpenList[openListIndex].vertexPrevious = &map.getVertex(currentVertexIndex);
                     vertexOpenList[openListIndex].costTravel = weight;
                     vertexOpenList[openListIndex].orientationOfRobot = orientation;
                 }
@@ -181,27 +196,120 @@ double AStar::heuristicDistance(Vertex current, Vertex goal){
     return 5*sqrt((goal.getXPosition()-current.getXPosition())*(goal.getXPosition()-current.getXPosition()) + (goal.getYPosition()-current.getYPosition())*(goal.getYPosition()-current.getYPosition()));
 }
 
-double AStar::calcWeight(VertexList closedListVertex, Edge newDirection){
+double AStar::calcWeight(VertexList closedListVertex, Edge newDirection, bool reverse){
     double weight = 0;
     
-    if (closedListVertex.orientationOfRobot == 'n' && (newDirection.getDirection() == 'n' || newDirection.getDirection() == 's'))
-    {
-        weight = closedListVertex.costTravel + newDirection.getWeight();
-    }
-    else if (closedListVertex.orientationOfRobot == 'e' && (newDirection.getDirection() == 'e' || newDirection.getDirection() == 'w'))
-    {
-        weight = closedListVertex.costTravel + newDirection.getWeight();
-    }
-    else if (closedListVertex.orientationOfRobot == 's' && (newDirection.getDirection() == 's' || newDirection.getDirection() == 'n'))
-    {
-        weight = closedListVertex.costTravel + newDirection.getWeight();
-    }
-    else if (closedListVertex.orientationOfRobot == 'w' && (newDirection.getDirection() == 'w' || newDirection.getDirection() == 'e'))
-    {
-        weight = closedListVertex.costTravel + newDirection.getWeight();
-    }
-    else {
-        weight = closedListVertex.costTravel + newDirection.getWeight()*turningMultiplyer;
+    switch (closedListVertex.orientationOfRobot) {
+        case 'n':
+            switch (newDirection.getDirection()) {
+                case 'n':
+                    weight = closedListVertex.costTravel + newDirection.getWeight();
+                    break;
+                    
+                case 'e':
+                    weight = closedListVertex.costTravel + newDirection.getWeight()*turningMultiplyer;
+                    break;
+                    
+                case 's':
+                    if (reverse) {
+                        weight = closedListVertex.costTravel + newDirection.getWeight();
+                    } else {
+                        weight = closedListVertex.costTravel + newDirection.getWeight()*turningMultiplyer*1.25;
+                    }
+                    break;
+                    
+                case 'w':
+                    weight = closedListVertex.costTravel + newDirection.getWeight()*turningMultiplyer;
+                    break;
+                    
+                default:
+                    break;
+            }
+            break;
+            
+        case 's':
+            switch (newDirection.getDirection()) {
+                case 'n':
+                    if (reverse) {
+                        weight = closedListVertex.costTravel + newDirection.getWeight();
+                    } else {
+                        weight = closedListVertex.costTravel + newDirection.getWeight()*turningMultiplyer*1.25;
+                    }
+                    break;
+                    
+                case 'e':
+                    weight = closedListVertex.costTravel + newDirection.getWeight()*turningMultiplyer;
+                    break;
+                    
+                case 's':
+                    weight = closedListVertex.costTravel + newDirection.getWeight();
+                    break;
+                    
+                case 'w':
+                    weight = closedListVertex.costTravel + newDirection.getWeight()*turningMultiplyer;
+                    break;
+                    
+                default:
+                    break;
+            }
+            break;
+            
+        case 'e':
+            switch (newDirection.getDirection()) {
+                case 'n':
+                    weight = closedListVertex.costTravel + newDirection.getWeight()*turningMultiplyer;
+                    break;
+                    
+                case 'e':
+                    weight = closedListVertex.costTravel + newDirection.getWeight();
+                    break;
+                    
+                case 's':
+                    weight = closedListVertex.costTravel + newDirection.getWeight()*turningMultiplyer;
+                    break;
+                    
+                case 'w':
+                    if (reverse) {
+                        weight = closedListVertex.costTravel + newDirection.getWeight();
+                    } else {
+                        weight = closedListVertex.costTravel + newDirection.getWeight()*turningMultiplyer*1.25;
+                    }
+                    break;
+                    
+                default:
+                    break;
+            }
+            break;
+            
+        case 'w':
+            switch (newDirection.getDirection()) {
+                case 'n':
+                    weight = closedListVertex.costTravel + newDirection.getWeight()*turningMultiplyer;
+                    break;
+                    
+                case 'e':
+                    if (reverse) {
+                        weight = closedListVertex.costTravel + newDirection.getWeight();
+                    } else {
+                        weight = closedListVertex.costTravel + newDirection.getWeight()*turningMultiplyer*1.25;
+                    }
+                    break;
+                    
+                case 's':
+                    weight = closedListVertex.costTravel + newDirection.getWeight()*turningMultiplyer;
+                    break;
+                    
+                case 'w':
+                    weight = closedListVertex.costTravel + newDirection.getWeight();
+                    break;
+                    
+                default:
+                    break;
+            }
+            break;
+            
+        default:
+            break;
     }
     
     return weight;
