@@ -42,6 +42,11 @@ private:
     
     // Write convertion to a .txt-file:
     void writeConvertionToFile();
+    
+    // Turning constants:
+    static const int left = 2;
+    static const int right = 3;
+    static const int uTurn = 4;
 };
 
 #endif /* SolutionConverter_hpp */

@@ -22,6 +22,9 @@ void SolutionConverter::startConverter(bool allowRobotToReverse){
     
     convertion.clear();
     
+    static const int goStraight = 1;
+    static const int reverse = 5;
+    
     // For all solutions:
     for (int i = 0 ; i < solution.size() ; i++) {
         
@@ -52,7 +55,7 @@ void SolutionConverter::startConverter(bool allowRobotToReverse){
                     tempConvertion.push_back(calculateDiretionChange(directionInit, directionNext));
                 }
                 
-                tempConvertion.push_back(1);
+                tempConvertion.push_back(goStraight);
                 
                 directionInit = directionNext;
             }
@@ -61,11 +64,20 @@ void SolutionConverter::startConverter(bool allowRobotToReverse){
             }
             
             // Move the diamond one space:
-            tempConvertion.push_back(1);
+            tempConvertion.push_back(goStraight);
+            
+            // Add a single straight push, and a reverse, to push the diamond to it's correct position:
+            if (j < solution[i].size() - 1) {
+                if (solution[i][j].positionAfter != solution[i][j+1].positionBefore) {
+                    tempConvertion.push_back(goStraight);
+                    tempConvertion.push_back(reverse);                }
+            }
             
             directionInit = directionPost;
         }
         
+        // Add a filan straight push, to get the last diamond in place:
+        tempConvertion.push_back(goStraight);
         convertion.push_back(tempConvertion);
     }
     // Write to .txt-file
@@ -85,7 +97,6 @@ char SolutionConverter::calculateDirection(int initIndex, int postIndex){
 
 int SolutionConverter::calculateDiretionChange(char dirInit, char dirPost){
     int change;
-    int left = 2, right = 3,uTurn = 4;
     
     /**
      1 = go straight;
