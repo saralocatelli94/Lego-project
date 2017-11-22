@@ -54,23 +54,34 @@ void SolutionConverter::startConverter(bool allowRobotToReverse){
                 if (directionInit != directionNext) {
                     tempConvertion.push_back(calculateDiretionChange(directionInit, directionNext));
                 }
-                
-                tempConvertion.push_back(goStraight);
+                else {
+                    tempConvertion.push_back(goStraight);
+                }
                 
                 directionInit = directionNext;
             }
             if (directionInit != directionPost) {
                 tempConvertion.push_back(calculateDiretionChange(directionInit, directionPost));
             }
-            
-            // Move the diamond one space:
-            tempConvertion.push_back(goStraight);
+            else {
+                // Move the diamond one space:
+                tempConvertion.push_back(goStraight);
+            }
             
             // Add a single straight push, and a reverse, to push the diamond to it's correct position:
             if (j < solution[i].size() - 1) {
                 if (solution[i][j].positionAfter != solution[i][j+1].positionBefore) {
                     tempConvertion.push_back(goStraight);
-                    tempConvertion.push_back(reverse);                }
+                    tempConvertion.push_back(reverse);
+                }
+                else {
+                    char dirInit = calculateDirection(solution[i][j].positionBefore, solution[i][j].positionAfter);
+                    char dirPost = calculateDirection(solution[i][j+1].positionBefore, solution[i][j+1].positionAfter);
+                    if (dirPost != dirInit) {
+                        tempConvertion.push_back(goStraight);
+                        tempConvertion.push_back(reverse);
+                    }
+                }
             }
             
             directionInit = directionPost;

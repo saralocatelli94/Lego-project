@@ -21,6 +21,8 @@
 #include "SolutionConverter.hpp"
 #include <ctime>
 
+
+
 using namespace rw::sensor;
 using namespace rw::loaders;
 
@@ -34,8 +36,9 @@ int main() {
     int map_width = 0, map_height = 0, numOfDimonds = 0;
     bool reverse = false;
     ifstream map; 
-    //map.open("Bane-copy-2.txt");
-    map.open("map_specs(2).txt");
+    //map.open("Bane-copy-2(1).txt");
+    //map.open("map_specs(4).txt");
+    map.open("testMap.txt");
     if (!map.is_open()) {
         cerr << "ERROR: Could not open map description file." << endl;
         return 0;
@@ -65,7 +68,7 @@ int main() {
     
     Graph start_map(numOfDimonds);
     int costOfDriving = 10;
-    char defaultSokobanDirection = 's';
+    char defaultSokobanDirection = 'e';
     
     /*
      (a) X - wall.
@@ -236,8 +239,8 @@ int main() {
     cout << "Road map string: " << start_map.getGraphRepresentation() << endl;
     cout << "Goal map string: " << goal_map.getGraphRepresentation() << endl;
     
-    //PathDrawer startMap(map_width, map_height, start_map);
-    //startMap.drawMapAndSave("Images/map_start.ppm");
+    PathDrawer startMap(map_width, map_height, start_map);
+    startMap.drawMapAndSave("Images/map_start.ppm");
     
     Solver_v2 solution(start_map, goal_map, numOfDimonds, map_width, map_height);
     
@@ -273,7 +276,7 @@ int main() {
                 
                 AStar aStarTest(start_map, start_map.getVertex(solutionList[j][i-1].positionAfter), start_map.getVertex(solutionList[j][i].positionBefore), dirInit, dirPost);
                 aStarTest.runAStar(false);
-                if (aStarTest.getPath().size() > 2) {
+                if (aStarTest.getPath().size() > 1) {
                     std::vector<VertexList> path = aStarTest.getPath();
                     PathDrawer b(map_width, map_height, start_map, path);
                     b.drawPathAndSave("Images/solution" + std::to_string(j+1) + "_step" + std::to_string(i-1) + "path.ppm");
