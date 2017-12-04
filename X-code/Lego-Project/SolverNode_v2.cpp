@@ -14,7 +14,7 @@ SolverNode_v2::SolverNode_v2(){
 SolverNode_v2::~SolverNode_v2(){
 }
 
-SolverNode_v2::SolverNode_v2(int posB, int posA, std::vector<int> dPos, int id_current, int id_prev, int depth, int distTravl, int distHeuristic):
+SolverNode_v2::SolverNode_v2(int posB, int posA, std::vector<int> dPos, int id_current, int id_prev, int depth, int distCurrent, int distTravl, int distHeuristic):
 positionBefore(posB), positionAfter(posA), diamondPositions(dPos), ID(id_current), prevID(id_prev), depthInTree(depth), distanceTraveled(distTravl), distanceHeuristic(distHeuristic){
-    distanceTotal = distanceTraveled + distanceHeuristic;
+    distanceTotal = distCurrent + distanceTraveled + distanceHeuristic;
 }

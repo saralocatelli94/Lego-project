@@ -37,7 +37,19 @@ roadMap(&map),path(&robotPath){
     initConstants();
 }
 
-void PathDrawer::drawMap(){
+PathDrawer::PathDrawer(unsigned int mapWidth,
+                       unsigned int mapHeight,
+                       Graph& map,
+                       std::vector<int> dlZone):
+width(mapWidth),
+height(mapHeight),
+roadMap(&map),
+deadlockZone(dlZone){
+    initImage();
+    initConstants();
+}
+
+void PathDrawer::drawMap(bool dlZone){
     // Paint everything black:
     for (int i = 0 ; i < img->getWidth()/_MAP_SCALER ; i++) {
         for (int j = 0 ; j < img->getHeight()/_MAP_SCALER ; j++) {
@@ -51,6 +63,13 @@ void PathDrawer::drawMap(){
         int x = roadMap->getVertex(i).getXPosition();
         int y = roadMap->getVertex(i).getYPosition();
         drawWithMapScaler(x, y, GRAY_FREESPACE, GRAY_FREESPACE, GRAY_FREESPACE);
+    }
+    if (dlZone) {
+        for (int i = 0 ; i < deadlockZone.size() ; i++) {
+            int x = roadMap->getVertex(deadlockZone[i]).getXPosition();
+            int y = roadMap->getVertex(deadlockZone[i]).getYPosition();
+            drawWithMapScaler(x, y, RED_DEADZONE, 0, 0);
+        }
     }
     
     // draw black grid for the robot to follow:
@@ -121,12 +140,12 @@ void PathDrawer::drawPath(){
     drawArrowsOnAllVertex();
 }
 
-void PathDrawer::drawMapAndSave(std::string fileName){
-    drawMap();
+void PathDrawer::drawMapAndSave(std::string fileName, bool dlZone){
+    drawMap(dlZone);
     saveImage(fileName);
 }
 
-void PathDrawer::drawPathAndSave(std::string fileName){
+void PathDrawer::drawPathAndSave(std::string fileName, bool dlZone){
     drawPath();
     saveImage(fileName);
 }

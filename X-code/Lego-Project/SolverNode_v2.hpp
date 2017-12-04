@@ -18,7 +18,14 @@ struct SolverNode_v2{
     SolverNode_v2();
     ~SolverNode_v2();
     
-    SolverNode_v2(int posB, int posA, std::vector<int> dPos, int id_current, int id_prev, int depth, int distTravl, int distHeuristic = 0);
+    SolverNode_v2(int posB, int posA, std::vector<int> dPos, int id_current, int id_prev, int depth, int distCurrent, int distTravl, int distHeuristic = 0);
+    
+    bool operator<(const SolverNode_v2 & rhs) const {
+        return (this->distanceTotal < rhs.distanceTotal);
+    }
+    bool operator>(const SolverNode_v2 & rhs) const {
+        return (this->distanceTotal > rhs.distanceTotal);
+    }
     
     // Robot position:
     int positionBefore;         // Before moving diamond

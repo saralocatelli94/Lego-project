@@ -21,8 +21,6 @@
 #include "SolutionConverter.hpp"
 #include <ctime>
 
-
-
 using namespace rw::sensor;
 using namespace rw::loaders;
 
@@ -38,7 +36,9 @@ int main() {
     ifstream map; 
     //map.open("Bane-copy-2(1).txt");
     //map.open("map_specs(4).txt");
-    map.open("testMap.txt");
+    //map.open("testMap.txt");
+    //map.open("ai01-competition-map-2016.txt");
+    map.open("2017-competation-map.txt");
     if (!map.is_open()) {
         cerr << "ERROR: Could not open map description file." << endl;
         return 0;
@@ -68,7 +68,7 @@ int main() {
     
     Graph start_map(numOfDimonds);
     int costOfDriving = 10;
-    char defaultSokobanDirection = 'e';
+    char defaultSokobanDirection = 'n';
     
     /*
      (a) X - wall.
@@ -239,13 +239,10 @@ int main() {
     cout << "Road map string: " << start_map.getGraphRepresentation() << endl;
     cout << "Goal map string: " << goal_map.getGraphRepresentation() << endl;
     
-    PathDrawer startMap(map_width, map_height, start_map);
-    startMap.drawMapAndSave("Images/map_start.ppm");
-    
     Solver_v2 solution(start_map, goal_map, numOfDimonds, map_width, map_height);
     
     clock_t begin = clock();
-    solution.startSolver(reverse);
+    solution.startSolver_2(reverse);
     clock_t end = clock();
     double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
     int minutes = elapsed_secs / 60;
@@ -255,11 +252,14 @@ int main() {
     
     for (int j = 0 ; j < solutionList.size() ; j++) {
         cout << "Solution " << j+1 << "\n";
+        int steps = 0;
         for (int i = 0 ; i < solutionList[j].size() ; i++) {
+            steps += solutionList[j][i].distanceTraveled;
             cout << setw(4) << "ID: " << setw(7) << solutionList[j][i].ID
             << setw(9) << " | PrevID:" << setw(7) << solutionList[j][i].prevID
             << setw(8) << " | Depth:" << setw(4) << solutionList[j][i].depthInTree
-            << setw(14) << " | Robot steps:" << setw(5) << solutionList[j][i].distanceTraveled << endl;
+            << setw(14) << " | Robot steps:" << setw(5) << steps
+            << setw(14) << " | Total steps:" << setw(5) << solutionList[j][i].distanceTotal << endl;
             
             if (i > 0) {
                 

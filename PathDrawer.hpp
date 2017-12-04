@@ -29,20 +29,23 @@ public:
     
     PathDrawer(unsigned int mapWidth, unsigned int mapHeight, Graph& map, std::vector<VertexList>& robotPath);
     
-    void drawMapAndSave(std::string fileName);
-    void drawPathAndSave(std::string fileName);
+    PathDrawer(unsigned int mapWidth, unsigned int mapHeight, Graph& map, std::vector<int> dlZone);
+    
+    void drawMapAndSave(std::string fileName, bool deadlockZone = false);
+    void drawPathAndSave(std::string fileName, bool deadlockZone = false);
     
 protected:
     Graph* roadMap;
     std::vector<VertexList>* path;
     unsigned int width, height;
+    std::vector<int> deadlockZone;
     
 private:
     void initImage();
     void initConstants();
     void saveImage(std::string fileName);
     
-    void drawMap();
+    void drawMap(bool deadlockZ = false);
     void drawPath();
     
     void drawWithMapScaler(int x, int y, int blue, int green, int red);
@@ -53,12 +56,15 @@ private:
     
     void drawStartAndGoalPoint();
     
+    void drawDeadzones();
+    
 private:
     Image* img;
     
 private:
     // Colors:
     unsigned int const RED_DIAMOND      = 200;
+    unsigned int const RED_DEADZONE     = 250;
     unsigned int const BLUE_SOKOBAN     = 200;
     unsigned int const GREEN_GOAL       = 200;
     unsigned int const GRAY_FREESPACE   = 200;
