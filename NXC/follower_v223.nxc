@@ -1,0 +1,337 @@
+#define LEFT_MOTOR OUT_A
+#define RIGHT_MOTOR OUT_C
+#define BOTH_MOTOR OUT_AC
+
+// I will add a few comments here, and also in the move() task
+// Instead of moving all sensors over the intersection after detecting with the CROSS sensor
+// we could stop and turn immediately and use the RIGHT sensor to detect the next line to follow
+// OR we could turn in place, instead of turning like how we did before
+// the senseLeft() and senseRight() tasks assume that all motors are already running
+// so the move task should turn them back on at the end
+
+// It is maybe possible that tasks will try to control the motors simultenously
+// this could be investigated
+
+#define FORWARD_SPEED_RIGHT 91 // 58
+#define FORWARD_SPEED_LEFT 92 // 60
+#define REVERSE_SPEED_LEFT -70
+#define REVERSE_SPEED_RIGHT -68
+
+#define LEFT_SENSOR IN_1
+#define RIGHT_SENSOR IN_4
+#define CROSS_SENSOR IN_2
+#define TOP_SENSOR IN_1
+#define LIGHT_LIMIT 48
+#define CROSS_LIMIT 36    //35
+
+#define TURN_WAIT 400
+#define TURN_SPEED_L 80
+#define TURN_SPEED_S 10
+
+bool isTurning = false;
+bool wasReversed = false;
+bool wasReversed2 = false;
+mutex moveMutex;
+
+task senseLeft()
+{
+ while(true)
+ {
+   until(!isTurning && (Sensor(LEFT_SENSOR) < LIGHT_LIMIT));  // left sensor is over line
+
+   Acquire(moveMutex);
+   if(!wasReversed2)
+   {
+     Float(LEFT_MOTOR);                                 // turn right
+     //Release(moveMutex);
+     until(Sensor(LEFT_SENSOR) > LIGHT_LIMIT);
+     //Wait(20); // ???
+     //Acquire(moveMutex);
+     OnFwd(LEFT_MOTOR, FORWARD_SPEED_LEFT);
+   }
+   else
+   {
+     PlayToneEx(350,500,8, FALSE);
+     OnFwd(LEFT_MOTOR, -(REVERSE_SPEED_LEFT));
+     Wait(60);
+     OnFwd(LEFT_MOTOR, REVERSE_SPEED_LEFT);
+     isTurning = true;
+   }
+   Release(moveMutex);
+ }
+}
+
+task senseRight()
+{
+ while(true)
+ {
+   until(!isTurning && (Sensor(RIGHT_SENSOR) < LIGHT_LIMIT));  // left sensor is over line
+   Acquire(moveMutex);
+   if(!wasReversed2)
+   {
+     Float(RIGHT_MOTOR);                               // turn left
+     //Release(moveMutex);
+     until(Sensor(RIGHT_SENSOR) > LIGHT_LIMIT);
+     //Wait(20); // ???
+     //Acquire(moveMutex);
+     OnFwd(RIGHT_MOTOR, FORWARD_SPEED_RIGHT);
+   }
+   else
+   {
+     PlayToneEx(350,500,8, FALSE);
+     OnFwd(RIGHT_MOTOR, -(REVERSE_SPEED_RIGHT));
+     Wait(60);
+     OnFwd(RIGHT_MOTOR, REVERSE_SPEED_RIGHT);
+     isTurning = true;
+   }
+   Release(moveMutex);
+ }
+}
+
+/*task waitReverse()
+{
+  printf("OOOOOO", Sensor(LEFT_SENSOR));
+  Wait(600);
+  wasReversed2 = false;
+  printf("XXXXXX", Sensor(LEFT_SENSOR));
+
+}*/
+
+task move()
+{
+
+ // TODO: this is not the proper way to allocate an array in NXC because it gives an error
+ // I think there is a solution in the NXC guide somewhere 
+
+ //int moveList[200] = {4,1,1,2,1,2,1,5,4,3,1,3,1,3,1,1,5,3,2,1,5,2,1,5,2,3,3,1,5,3,2,3,1,1,5,3,1,3,2,1,5,3,2,2,1,1};         // list of moves: [forward, left, right, back]
+ //int moveList[200] = {5,2,5,1,3,5,4,5};
+ int moveList[200] = {1,1,5,4,1,3,1,3,1,3,1,1,5,3,2,1,2,1,1,1,2,3,1,2,1,1,2,1,2,1,1,5,3,1,1,1,5,3,1,2,1,2,1,2,1,1,1,1,5,4,1,1,2,1,2,1,1,2,1,5,3,1,1,1,5,3,2,2,1,1,5,2,3,2,1,2,1,5,3,1,5,2,1,3,1,1,3,1,3,1,1,1,5,3,2,1,1,1,5,2,3,3,1,5,4,2,3,2,1,2,1,5,3,1,1,3,1,2,2,1,5,3,2,2,1,1,1,1,5,3,2,1,1,1,5,2,3,1,3,1,3,1,5,3,1,5,3,2,2,1,5,3,1,5,2,1,1,2,1,5,3,2,1,3,1,3,1,5,2,3,3,1,1,1,5,3,2,1,1,1,1,5,2,1,3,2,2,1};
+ int index = 0;
+ while(true)
+ {
+  until(Sensor(CROSS_SENSOR) < CROSS_LIMIT);                  // robot at intersection
+  Acquire(moveMutex);
+  //PlayToneEx(350,500,8, FALSE);
+  isTurning = true;
+  if(wasReversed)
+  {
+    if(moveList[index] == 4)
+    {
+    }
+    else
+    {
+      Float(BOTH_MOTOR);
+      Wait(100);
+      OnFwd(RIGHT_MOTOR, FORWARD_SPEED_RIGHT);
+      OnFwd(LEFT_MOTOR,FORWARD_SPEED_LEFT);
+      Wait(160);  // 300
+    }
+    start senseLeft;
+    start senseRight;
+    wasReversed = false;
+  }
+
+   switch(moveList[index])
+   {
+    case(1):
+    {
+     // forward
+     PlayToneEx(350,200,7, FALSE);
+     PlayToneEx(415,200,7, FALSE);
+     bool leftDetect = false;
+     bool rightDetect = false;
+     while(!leftDetect && !rightDetect)
+     {
+       leftDetect = Sensor(LEFT_SENSOR);
+       rightDetect = Sensor(RIGHT_SENSOR);
+       if(leftDetect && !rightDetect)
+       {
+         Float(LEFT_MOTOR);
+         PlayToneEx(350,200,7, FALSE);
+         PlayToneEx(415,200,7, FALSE);
+         Wait(100);
+         OnFwd(LEFT_MOTOR, FORWARD_SPEED_LEFT);
+       }
+       else if(rightDetect && !leftDetect)
+       {
+         Float(RIGHT_MOTOR);
+         PlayToneEx(350,200,7, FALSE);
+         PlayToneEx(415,200,7, FALSE);
+         Wait(100);
+         OnFwd(RIGHT_MOTOR, FORWARD_SPEED_RIGHT);
+       }
+     }
+     /*until((Sensor(LEFT_SENSOR) < LIGHT_LIMIT) || (Sensor(RIGHT_SENSOR) < LIGHT_LIMIT));
+     if(Sensor(LEFT_SENSOR) < LIGHT_LIMIT)
+     {
+       Float(LEFT_MOTOR);
+       Wait(50);
+       OnFwd(LEFT_MOTOR, FORWARD_SPEED_LEFT);
+     }
+     else
+     {
+       Float(RIGHT_MOTOR);
+       Wait(50);
+       OnFwd(RIGHT_MOTOR, FORWARD_SPEED_RIGHT);
+     }*/
+     Wait(200);
+     Release(moveMutex);
+     isTurning = false;
+     break;
+    }
+    case(3):
+    {
+     // This wait could be taken out, and the RIGHT sensor moved over the black lines
+     // by adjusting the Waits to ignore detections until the next line to follow comes
+     // we could also try counting the sensor detections, and stop when over the next line
+     Wait(100);  //100
+	   OnFwd(BOTH_MOTOR, 0);
+	   OnFwd(RIGHT_MOTOR, 10);
+	   OnFwd(LEFT_MOTOR, 80);
+     Wait(500);
+     PlayToneEx(350,500,8, FALSE);
+     until(Sensor(LEFT_SENSOR) < LIGHT_LIMIT);  // left sensor is over line
+	   PlayToneEx(350,500,8, FALSE);
+	   //OnFwd(BOTH_MOTOR, 0);
+	   //OnFwd(LEFT_MOTOR, FORWARD_SPEED_LEFT/2);
+	   //OnFwd(RIGHT_MOTOR, FORWARD_SPEED_RIGHT);
+	   Wait(70);
+     until(Sensor(LEFT_SENSOR) > LIGHT_LIMIT);
+     Wait(10); // 20
+     OnFwd(LEFT_MOTOR, FORWARD_SPEED_LEFT);
+     // the senseLeft() and senseRight() tasks assume that all motors are already running
+     // so the move task should turn them back on at the end
+     Release(moveMutex);
+     isTurning = false;
+     break;
+    }
+    case(2):
+    {
+     // turn left
+     Wait(100);
+	   OnFwd(BOTH_MOTOR, 0);
+	   OnFwd(LEFT_MOTOR, 10);
+	   OnFwd(RIGHT_MOTOR, 80);
+     Wait(500);
+     PlayToneEx(350,500,8, FALSE);
+     until(Sensor(RIGHT_SENSOR) < LIGHT_LIMIT);  // right sensor is over line
+	   PlayToneEx(350,500,8, FALSE);
+	   Wait(70);
+     until(Sensor(RIGHT_SENSOR) > LIGHT_LIMIT);
+     //Wait(10); // 20
+     OnFwd(RIGHT_MOTOR, FORWARD_SPEED_RIGHT);
+     Release(moveMutex);
+     isTurning = false;
+     break;
+    }
+    case(4):
+    {
+     // turn around
+	   /*OnFwd(BOTH_MOTOR, 0);
+	   OnFwd(RIGHT_MOTOR, FORWARD_SPEED_RIGHT);
+	   OnFwd(LEFT_MOTOR, REVERSE_SPEED_LEFT);;
+     until(Sensor(LEFT_SENSOR) < LIGHT_LIMIT);  // left sensor is over line
+	   PlayToneEx(350,500,8, FALSE);
+	   OnFwd(BOTH_MOTOR, 0);
+	   OnFwd(RIGHT_MOTOR, FORWARD_SPEED_RIGHT);
+	   Wait( 90);  //100
+     until(Sensor(LEFT_SENSOR) > LIGHT_LIMIT);
+     Wait(5); // ???
+     OnFwd(LEFT_MOTOR, FORWARD_SPEED_LEFT);*/
+     OnFwd(RIGHT_MOTOR, FORWARD_SPEED_RIGHT);
+     OnFwd(LEFT_MOTOR, FORWARD_SPEED_LEFT);
+     until(Sensor(RIGHT_SENSOR)< LIGHT_LIMIT &&  Sensor(LEFT_SENSOR)< LIGHT_LIMIT);
+     Wait(70);
+     OnFwd(RIGHT_MOTOR, 80);
+     OnFwd(LEFT_MOTOR, -80);
+     until(Sensor(CROSS_SENSOR)<CROSS_LIMIT);
+     until(Sensor(CROSS_SENSOR)>CROSS_LIMIT);
+     Wait(150);
+     OnFwd(RIGHT_MOTOR, 60);
+     OnFwd(LEFT_MOTOR, -60);
+     until(Sensor(CROSS_SENSOR)<CROSS_LIMIT);
+     until(Sensor(LEFT_SENSOR)<LIGHT_LIMIT);
+     Wait(30);
+     //until(Sensor(LEFT_SENSOR)>LIGHT_LIMIT);
+     OnFwd(RIGHT_MOTOR, FORWARD_SPEED_RIGHT);
+     OnFwd(LEFT_MOTOR, FORWARD_SPEED_LEFT);
+     Release(moveMutex);
+     isTurning = false;
+     break;
+    }
+    case(5):
+    {
+     // backwards
+     //PlayToneEx(350,500,8, FALSE);
+     Float(BOTH_MOTOR);
+     Wait(100);
+     OnFwd(RIGHT_MOTOR, REVERSE_SPEED_RIGHT);
+     OnFwd(LEFT_MOTOR, REVERSE_SPEED_LEFT);
+     Release(moveMutex);
+     wasReversed = true;
+     wasReversed2 = true;
+     Wait(200);
+     //PlayToneEx(350,500,8, FALSE);
+     isTurning = false; // no isTurning = false;
+     Wait(700);
+     wasReversed2 = false;
+     stop senseLeft;
+     stop senseRight;
+     PlayToneEx(350,200,7, FALSE);
+     PlayToneEx(415,200,7, FALSE);
+     break;
+    }
+    default:
+     // ?
+  }
+  ++index;
+  /*if(index == 8)
+  {
+    index = 0;
+  }*/
+ }
+}
+
+task main()
+{
+ SetSensorLight(LEFT_SENSOR);
+ SetSensorLight(RIGHT_SENSOR);
+ SetSensorLight(CROSS_SENSOR);
+ OnFwd(LEFT_MOTOR, FORWARD_SPEED_LEFT);
+ OnFwd(RIGHT_MOTOR, FORWARD_SPEED_RIGHT);
+
+ /* while(true){
+    printf("light level L%d", Sensor(LEFT_SENSOR));
+ }     */
+
+ Precedes(senseLeft, senseRight,move);
+
+}
+
+/*
+case(2):
+    {
+	   // This wait could be taken out, and the RIGHT sensor moved over the black lines
+     // by adjusting the Waits to ignore detections until the next line to follow comes
+     // we could also try counting the sensor detections, and stop when over the next line
+
+     Wait(100);
+	   OnFwd(BOTH_MOTOR, 0);
+	   OnFwd(LEFT_MOTOR, 12);
+	   OnFwd(RIGHT_MOTOR, 60);
+     Wait(800);
+     PlayToneEx(350,500,8, FALSE);
+     until(Sensor(RIGHT_SENSOR) < LIGHT_LIMIT);  // left sensor is over line
+	   PlayToneEx(350,500,8, FALSE);
+	   OnFwd(BOTH_MOTOR, 0);
+	   Wait(500);
+	   OnFwd(LEFT_MOTOR, FORWARD_SPEED_LEFT);                               // turn left
+     until(Sensor(RIGHT_SENSOR) > LIGHT_LIMIT);
+     Wait(5); // ???
+     OnFwd(RIGHT_MOTOR, FORWARD_SPEED_RIGHT);
+     // the senseLeft() and senseRight() tasks assume that all motors are already running
+     // so the move task should turn them back on at the end
+     break;
+    }
+*/
+
